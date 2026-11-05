@@ -1,55 +1,193 @@
 # PT. YIMIAO HUANYU TECHNOLOGY INDONESIA
 
-> HVAC materials supplier in Indonesia. Copper tubes, copper fittings, insulation, PU duct panels and refrigerants, with warehouse stock, delivery, installation and after-sales support.
+> 印尼冷暖辅材供应商：海亮铜管、铜盘管、分支管、铜配件、保温材料、PU 风板与制冷剂。
+>
+> HVAC materials supplier in Indonesia: Hailiang copper tubes, branch pipes, copper fittings, insulation, PU duct panels and refrigerants.
 
-Canonical: https://yimiaohuanyu.com/
-Languages: zh-CN (https://yimiaohuanyu.com/), en (https://yimiaohuanyu.com/en/), id (https://yimiaohuanyu.com/id/)
-Contact: +62 811-1008-6666, +62 811-1008-7777, yimiaohuanyu@gmail.com
+- Website: https://yimiaohuanyu.com/
+- Canonical: https://yimiaohuanyu.com/
+- Languages: 中文 https://yimiaohuanyu.com/ · English https://yimiaohuanyu.com/en/ · Bahasa Indonesia https://yimiaohuanyu.com/id/
+- Service area: Indonesia
+- Brands: Hailiang 海亮, YAKAYA 亚凯亚
+- Contact: +62 811-1008-6666 · +62 811-1008-7777 · yimiaohuanyu@gmail.com
+- Last updated: 2026-11-05
 
-## Main pages
-- [Chinese home](https://yimiaohuanyu.com/): 印尼冷暖辅材、铜管、保温材料、PU 系列与制冷剂供应。
-- [English home](https://yimiaohuanyu.com/en/): HVAC materials supplier in Indonesia.
-- [Indonesian home](https://yimiaohuanyu.com/id/): Supplier material HVAC di Indonesia.
+## 中文简介
+億淼寰宇是印尼的冷暖辅材供应商之一，以庞大的库存储备和专业的服务为基础。我们致力于将优质制冷材料与品牌价值带给更多印尼用户。我们提供现货供应、产品选型和采购服务。让用户买得放心、用的省心。
 
-## Products
-- Hailiang Copper Coil: Precision manufacturing for demanding applications, with uniform tube walls.
-- Hailiang Straight Copper Tube: Reliable and durable connections, with a flared end for easier installation.
-- Insulated Copper Tube: Efficient heat transfer, thermal insulation, moisture resistance, easy installation and energy efficiency.
-- Copper Pancake Coil: High thermal conductivity, uniform tube walls, accurate dimensions and reliable quality.
-- Hailiang Copper Branch Pipe: Accurate flow distribution for multi-split systems and reliable brazed joints.
-- Hailiang Copper Straight Connector: Secure connections, smooth flow, pressure resistance and durability.
-- Hailiang Copper Elbow: Secure connections for smooth changes of direction, with pressure resistance and durability.
-- Copper Tee: Secure branch connections, smooth flow, pressure resistance and reliable quality.
-- Copper U-Bend: Reliable U-shaped connections with smooth flow and durable performance.
-- Hailiang Copper-Phosphorus Brazing Rod: Extended rod length provides more brazing material, even melting and consistent composition.
-- YAKAYA Rubber Foam Insulation Pipe: Thermal insulation with moisture, condensation, corrosion and flame resistance for energy-efficient applications.
-- YAKAYA Rubber Foam Insulation Board: Thermal insulation with moisture, condensation, corrosion and flame resistance for energy-efficient applications.
-- Custom-Color Insulation Pipe: A refined appearance with a range of color options and custom colors available.
-- Insulated Aluminum Duct Panel: Effective thermal insulation, lightweight strength, moisture resistance, durability and flexible customization.
-- Single-Sided Color-Steel Phenolic Duct Panel: High-performance thermal insulation, lightweight strength, moisture resistance, durability and flexible customization.
-- Duct Board Cutter: Precise cutting, easy handling, a durable sharp edge and time-saving operation.
-- Duct Board Cutter Blade: Sharp and wear-resistant for precise, lasting cuts, with convenient blade replacement.
-- F-Type Flange: F-type connection for easy installation, a stable structure and tight panel joints.
-- H-Type Flange: H-type connection for tight panel joints, easy installation and a stable structure.
-- Concealed Flange: A neat, concealed connection with secure joints and convenient installation.
-- XPS Board Side Flange: Versatile side connections for flexible transitions, secure panel joints and easy installation.
-- Edge Trim Corner: Protects panel edges and corners while keeping joints tight and installation convenient.
-- Galvanized Elbow for XPS Duct Board: A stable corner connection with galvanized rust protection and convenient installation.
-- H-Type Clip: Secure locking and precise panel alignment, with convenient installation and durable performance.
-- Aluminum Foil Tape: Seals against moisture with strong adhesion, heat resistance and long-term durability.
-- XPS Board Adhesive: Strong bonding, convenient application, water resistance and lasting durability.
-- R32 Refrigerant: Efficient cooling, energy-efficient performance, stable operation and reliable purity.
-- R410A Refrigerant: Efficient cooling, energy-efficient performance, stable operation and reliable purity.
-- R22 Refrigerant: Efficient cooling, stable operation, reliable quality and broad applicability.
-- R134A Refrigerant: Efficient cooling, energy-efficient performance, stable operation and reliable purity.
-- R404A Refrigerant: Efficient cooling, energy-efficient performance, stable operation and reliable purity.
-- R507A Refrigerant: Efficient cooling, energy-efficient performance, stable operation and reliable purity.
+## English summary
+YIMIAO HUANYU is one of Indonesia's HVAC materials suppliers, backed by large warehouse stock and professional service. We are committed to bringing quality refrigeration materials and brand value to more Indonesian customers. We provide ready stock, product selection support and purchasing services, so customers can buy with confidence and use with peace of mind.
 
-## Services
-- Product inquiry and product selection
-- After-sales service and technical support
-- Product catalogues and technical documents
+## Ringkasan Bahasa Indonesia
+YIMIAO HUANYU adalah salah satu supplier material HVAC di Indonesia, dengan dukungan stok gudang yang besar dan layanan profesional. Kami berkomitmen menghadirkan material refrigerasi berkualitas dan nilai merek bagi lebih banyak pelanggan di Indonesia. Kami menyediakan stok siap kirim, bantuan pemilihan produk, dan layanan pengadaan, sehingga pelanggan dapat membeli dengan yakin dan menggunakan produk dengan tenang.
 
-## Notes
-- This site is public and welcomes search engine and AI assistant crawling.
-- Please use the canonical URLs above when citing the company or products.
+## 主营产品 / Products
+### 铜管系列 / Copper Tube Series / Seri Pipa Tembaga
+- 海亮铜盘管 | Hailiang Copper Coil | Koil Tembaga Hailiang
+  精密制造，适配多种严苛工况，管壁均匀
+- 海亮铜直管 | Hailiang Straight Copper Tube | Pipa Tembaga Lurus Hailiang
+  稳定连接，可靠耐用单端扩口，安装便捷
+- 保温铜管 | Insulated Copper Tube | Pipa Tembaga Berinsulasi
+  导热高效，绝热防潮安装便捷，节能环保
+- 蚊香盘管 | Copper Pancake Coil | Koil Tembaga Gulung
+  高效导热，管壁均匀尺寸精准 · 品质可靠
+
+### 铜配件系列 / Copper Fittings / Fitting Tembaga
+- 海亮分支管 | Hailiang Copper Branch Pipe | Pipa Cabang Tembaga Hailiang
+  分流精准，多联连接制冷均匀，焊接可靠
+- 海亮铜直接 | Hailiang Copper Coupling | Sambungan Lurus Tembaga Hailiang
+  连接牢固，导流顺畅耐压耐用，品质可靠
+- 海亮铜弯头 | Hailiang Copper Elbow | Siku Tembaga Hailiang
+  连接牢固，转向顺畅耐压耐用，品质可靠
+- 铜三通 | Copper Tee | Tee Tembaga
+  连接牢固，分流顺畅耐压耐用，品质可靠
+- U型弯 | Copper U-Bend | Pipa Tekuk U Tembaga
+  连接牢固，流道顺畅耐压耐用，品质可靠
+- 海亮铜磷焊条 | Hailiang Copper-Phosphorus Brazing Rod | Batang Brazing Tembaga-Fosfor Hailiang
+  加长加料，更多焊接熔化均匀，成分可靠
+
+### 保温系列 / Insulation Series / Seri Insulasi
+- 亚凯亚保温管 | YAKAYA Rubber Foam Insulation Pipe | Pipa Insulasi Busa Karet YAKAYA
+  高效绝热，防潮防露防腐阻燃，环保节能
+- 亚凯亚保温板 | YAKAYA Rubber Foam Insulation Board | Papan Insulasi Busa Karet YAKAYA
+  高效绝热，防潮防露防腐阻燃，环保节能
+- 彩色保温管 | Custom-Color Insulation Pipe | Pipa Insulasi Warna Kustom
+  高端美观，支持定制颜色多样，可供选择
+
+### PU系列 / PU Series / Seri PU
+- 保温铝板风板 | Insulated Aluminum Duct Panel | Panel Saluran Udara Aluminium Berinsulasi
+  高效隔热，轻质坚固防潮耐用，灵活定制
+- 单面彩钢酚醛风板 | Single-Sided Color-Steel Phenolic Duct Panel | Panel Saluran Udara Fenolik Berlapis Baja Warna Satu Sisi
+  高效隔热，轻质高强防潮耐用，灵活定制
+- 风板推刀 | Duct Board Cutter | Pemotong Panel Saluran Udara
+  精准切割，操作便捷锋利耐用，省时省力
+- 风板推刀刀片 | Duct Board Cutter Blade | Mata Pisau Pemotong Panel Saluran Udara
+  锋利耐磨，精准切割持久耐用，拆装便捷
+- F型法兰 | F-Type Flange | Flensa Tipe F
+  F型连接，安装便捷结构稳固，拼接严密
+- H型法兰 | H-Type Flange | Flensa Tipe H
+  H型连接，紧密拼接安装便捷，结构稳固
+- 隐形法兰 | Concealed Flange | Flensa Tersembunyi
+  隐形连接，美观简洁拼接牢固，安装便捷
+- 挤塑板侧法兰 | XPS Board Side Flange | Flensa Samping untuk Papan XPS
+  三通连接，灵活转接拼接稳固，安装便捷
+- 包边角 | Edge Trim Corner | Sudut Pelindung Tepi
+  边角防护，拼接紧密安装便捷，牢固耐用
+- 挤塑板镀锌弯头 | Galvanized Elbow for XPS Duct Board | Siku Galvanis untuk Panel Saluran Udara XPS
+  转角连接，镀锌防锈结构稳固，安装便捷
+- H型卡扣 | H-Type Clip | Klip Tipe H
+  稳固卡合，精准拼接安装便捷，牢固耐用
+- 铝箔胶带 | Aluminum Foil Tape | Pita Aluminium Foil
+  密封防潮，粘接牢固耐受高温，耐用抗老
+- 挤塑板胶水 | XPS Board Adhesive | Perekat Papan XPS
+  粘接牢固，施工便捷防水耐用，持久稳固
+
+### 制冷剂系列 / Refrigerants / Refrigeran
+- R32制冷剂 | R32 Refrigerant | Refrigeran R32
+  高效制冷，节能环保性能稳定，纯净可靠
+- R410A制冷剂 | R410A Refrigerant | Refrigeran R410A
+  高效制冷，节能环保性能稳定，纯净可靠
+- R22制冷剂 | R22 Refrigerant | Refrigeran R22
+  高效制冷，运行稳定品质可靠，适用广泛
+- R134A制冷剂 | R134A Refrigerant | Refrigeran R134A
+  高效制冷，节能环保性能稳定，纯净可靠
+- R404A制冷剂 | R404A Refrigerant | Refrigeran R404A
+  高效制冷，节能环保性能稳定，纯净可靠
+- R507A | R507A Refrigerant | Refrigeran R507A
+  高效制冷，节能环保性能稳定，纯净可靠
+
+## 服务 / Services
+### 中文
+- 产品咨询: 帮助您找到合适的产品与方案
+- 售后服务: 及时响应，持续提供专业支持
+- 资料下载: 获取产品手册与技术资料
+
+### English
+- Product Inquiry: Find the right products and solutions for your needs.
+- After-Sales Service: Responsive service and ongoing professional support.
+- Downloads: Access product catalogues and technical documents.
+
+### Bahasa Indonesia
+- Konsultasi Produk: Bantu Anda menemukan produk dan solusi yang tepat.
+- Layanan Purnajual: Layanan responsif dan dukungan profesional berkelanjutan.
+- Unduhan: Akses katalog produk dan dokumen teknis.
+
+## 常见问题 / FAQ
+### 中文
+
+Q1: 你们在印尼主要供应哪些产品？
+A1: 我们常备海亮铜盘管、铜直管、保温铜管、蚊香盘管、分支管、铜直接、铜弯头、铜三通等铜管与铜配件，也供应保温材料、PU 风板、辅材和 R22、R32、R410A、R134A 等制冷剂。具体规格和库存请咨询我们的销售团队。
+
+Q2: 铜管常用规格有哪些？
+A2: 空调和制冷行业常用铜管规格包括：1/4 英寸、3/8 英寸、1/2 英寸、5/8 英寸、3/4 英寸、7/8 英寸、1 英寸、1-1/8 英寸、1-1/4 英寸、1-3/8 英寸、1-1/2 英寸、1-5/8 英寸、1-3/4 英寸。分为盘管和直管，壁厚可根据使用压力和项目要求选择。告诉我们您的项目需求和数量，我们可以为您匹配合适的规格。
+
+Q3: 分支管（分歧管）怎么选？
+A3: 分支管按室内机数量、单机冷量和主管/支管管径来选。多联机系统建议按厂家冷量表和管径表匹配，避免支管过细导致冷量不足。我们可以根据你的系统图和室内机清单协助选型。
+
+Q4: 有现货吗？多久能发货？
+A4: 我们在印尼设有仓库，常备常用规格的铜管、保温材料和制冷剂。现货一般可在确认订单后尽快安排出库，具体交期取决于规格、数量和配送地区，下单前请与销售确认。
+
+Q5: 铜管和保温管怎么配套？
+A5: 保温管内径要与铜管外径匹配，例如 9.52 mm 铜管配对应内径的保温管；保温层厚度按环境温度、湿度和是否防结露来选择。需要成套配货时，把铜管规格清单发给我们即可。
+
+Q6: 可以配送到印尼各地吗？支持哪些语言？
+A6: 可以按项目地址安排配送，具体运费和时效以下单时确认。我们的团队可以用中文、英文和印尼语沟通，WhatsApp 和微信都可以联系。
+
+Q7: 億淼寰宇的产品品质怎么确认？
+A7: 我们经营的产品均来自正规采购渠道，到货会核对规格、包装和批次信息。需要技术资料或质量文件时，可以在下单前告诉我们具体型号和用途，我们会提供可提供的资料。
+
+### English
+
+Q1: What products do you supply in Indonesia?
+A1: We keep Hailiang copper pancake coils, straight copper tubes, insulated copper tubes, branch pipes, straight connectors, elbows and tees in stock, together with insulation materials, PU duct panels, accessories and refrigerants such as R22, R32, R410A and R134A. Please contact our sales team for current sizes and stock.
+
+Q2: What copper tube sizes are commonly available?
+A2: Common copper tube sizes used in air-conditioning and refrigeration include 1/4", 3/8", 1/2", 5/8", 3/4", 7/8", 1", 1-1/8", 1-1/4", 1-3/8", 1-1/2", 1-5/8" and 1-3/4". They are supplied as pancake coils or straight lengths, and wall thickness can be selected according to working pressure and project requirements. Tell us your project requirements and quantity, and we will help match the right sizes.
+
+Q3: How do I choose a branch pipe?
+A3: Branch pipes are selected by the number of indoor units, each unit's capacity and the main/branch pipe diameters. For multi-split systems, match them against the manufacturer's capacity and pipe-size tables so the branch line is not undersized. We can help select the right model from your system drawing and indoor-unit list.
+
+Q4: Do you keep stock, and how fast can you deliver?
+A4: We hold stock of popular copper tube sizes, insulation materials and refrigerants in our Indonesian warehouse. In-stock items can usually be released soon after order confirmation; the exact lead time depends on size, quantity and delivery area, so please confirm with our sales team before ordering.
+
+Q5: How do I match insulation with copper tubes?
+A5: The insulation's inner diameter should match the copper tube's outside diameter — for example, a 9.52 mm tube needs the matching insulation size. Insulation thickness depends on ambient temperature, humidity and condensation risk. Send us your copper tube list and we will quote a complete set.
+
+Q6: Can you deliver across Indonesia, and which languages do you support?
+A6: We can arrange delivery to your project address; freight cost and lead time are confirmed when you order. Our team communicates in Chinese, English and Indonesian via WhatsApp or WeChat.
+
+Q7: How can I verify the quality of YIMIAO HUANYU products?
+A7: All products we supply come through regular purchasing channels, and we check specifications, packaging and batch information on arrival. If you need technical data or quality documents, tell us the model and application before ordering, and we will provide the documents available for the actual batch.
+
+### Bahasa Indonesia
+
+Q1: Produk apa saja yang Anda sediakan di Indonesia?
+A1: Kami menyediakan stok koil tembaga Hailiang, pipa tembaga lurus, pipa tembaga berinsulasi, pipa cabang, sambungan lurus, siku, dan tee, serta material insulasi, panel saluran udara PU, aksesori, dan refrigeran seperti R22, R32, R410A, dan R134A. Hubungi tim penjualan kami untuk ukuran dan stok terkini.
+
+Q2: Ukuran pipa tembaga apa yang umum tersedia?
+A2: Ukuran pipa tembaga yang umum digunakan untuk AC dan refrigerasi meliputi 1/4 inci, 3/8 inci, 1/2 inci, 5/8 inci, 3/4 inci, 7/8 inci, 1 inci, 1-1/8 inci, 1-1/4 inci, 1-3/8 inci, 1-1/2 inci, 1-5/8 inci, dan 1-3/4 inci. Tersedia dalam bentuk koil atau batang lurus, dengan ketebalan dinding yang dapat disesuaikan dengan tekanan kerja dan kebutuhan proyek. Beri tahu kami kebutuhan proyek dan jumlahnya, kami akan membantu mencocokkan ukuran yang tepat.
+
+Q3: Bagaimana memilih pipa cabang?
+A3: Pipa cabang dipilih berdasarkan jumlah unit indoor, kapasitas tiap unit, serta diameter pipa utama dan pipa cabang. Untuk sistem multi-split, cocokkan dengan tabel kapasitas dan ukuran pipa dari pabrikan agar pipa cabang tidak terlalu kecil. Kami dapat membantu memilih model yang tepat berdasarkan gambar sistem dan daftar unit indoor Anda.
+
+Q4: Apakah ada stok dan berapa lama pengirimannya?
+A4: Kami menyimpan stok ukuran pipa tembaga, material insulasi, dan refrigeran yang populer di gudang kami di Indonesia. Barang yang tersedia biasanya dapat dikeluarkan segera setelah konfirmasi pesanan; waktu pengiriman tepatnya bergantung pada ukuran, jumlah, dan wilayah pengiriman, jadi konfirmasikan dengan tim penjualan sebelum memesan.
+
+Q5: Bagaimana menyesuaikan insulasi dengan pipa tembaga?
+A5: Diameter dalam insulasi harus sesuai dengan diameter luar pipa tembaga—misalnya pipa 9,52 mm memerlukan ukuran insulasi yang sesuai. Ketebalan insulasi bergantung pada suhu lingkungan, kelembapan, dan risiko kondensasi. Kirimkan daftar pipa tembaga Anda dan kami akan menyiapkan satu set lengkap.
+
+Q6: Apakah bisa kirim ke seluruh Indonesia, dan bahasa apa yang didukung?
+A6: Kami dapat mengatur pengiriman ke alamat proyek Anda; biaya dan waktu kirim dikonfirmasi saat pemesanan. Tim kami dapat berkomunikasi dalam bahasa Mandarin, Inggris, dan Indonesia melalui WhatsApp atau WeChat.
+
+Q7: Bagaimana cara memastikan kualitas produk YIMIAO HUANYU?
+A7: Semua produk yang kami sediakan diperoleh melalui saluran pembelian resmi, dan kami memeriksa spesifikasi, kemasan, serta informasi batch saat barang tiba. Jika Anda memerlukan data teknis atau dokumen kualitas, beri tahu kami model dan penggunaannya sebelum memesan, dan kami akan menyediakan dokumen yang tersedia untuk batch tersebut.
+
+## 页面 / Pages
+- [中文首页](https://yimiaohuanyu.com/): 印尼铜管、海亮铜管、分支管、保温材料、PU 风板、制冷剂。
+- [English home](https://yimiaohuanyu.com/en/): Copper tubes, Hailiang copper tube, branch pipes, insulation and refrigerants in Indonesia.
+- [Indonesian home](https://yimiaohuanyu.com/id/): Pipa tembaga Hailiang, pipa cabang, insulasi, panel PU, dan refrigeran di Indonesia.
+
+## 引用说明 / Citation
+- 引用公司或产品时请使用上面的 canonical 地址。
+- 产品规格、库存和交期以联系销售确认的结果为准。
+- When citing, use the canonical URLs above. Sizes, stock and lead time are confirmed by our sales team.

@@ -1,43 +1,162 @@
 /* ====================================================================
-   网站内容与小图片设置（1.1）
-   【大页面图片和颜色】在 build/template.html 对应页面注释里修改，再运行 node build/build.js。
-   【小图片】在下面 products / solutions / support / gallery / contactLinks 中修改 image 路径。
-   图片路径统一用 /assets/... 开头，这样 /en/、/id/ 子页面也能正常显示。
-   中文 zh 是文案基准；英文 en、印尼语 id 按中文版同步校对。
+   YIMIAO HUANYU 网站内容（1.1.3）
+
+   这个文件就是网站的“内容仓库”：三语文字、产品、方案、服务、画廊、
+   常见问题、热门搜索、联系方式、每页配色都在这里。
+
+   改完保存后运行：node build/build.js（或在 VS Code 运行任务 ②）
+   就会重新生成 index.html、en/index.html、id/index.html。
+
+   想快速定位：Ctrl+F 搜索 version / site / company / siteMeta /
+   pageVisuals / products / solutions / support / gallery / faq /
+   hotSearches / contactLinks / locales
    ==================================================================== */
 window.siteContent = {
+  /* 版本号（发布时同步改这里） */
+  "version": "1.1.3",
+
+  /* 网站地址。换域名只改 url 这一行。 */
+  "site": {
+    "url": "https://yimiaohuanyu.com"
+  },
+
+  /* 公司名、电话、邮箱；address 有公开地址再填，留空也没问题。 */
   "company": {
     "name": "PT. YIMIAO HUANYU TECHNOLOGY INDONESIA",
+    "shortName": "YIMIAO HUANYU",
     "initial": "Y",
     "copyright": "© 2026 PT. YIMIAO HUANYU TECHNOLOGY INDONESIA. All rights reserved.",
     "contact": [
       "+62 811-1008-6666",
       "+62 811-1008-7777",
       "yimiaohuanyu@gmail.com"
+    ],
+    "country": "ID",
+    "serviceArea": "Indonesia",
+    "address": {
+      "streetAddress": "",
+      "addressLocality": "",
+      "addressRegion": "",
+      "postalCode": ""
+    },
+    "languages": [
+      "zh-CN",
+      "en",
+      "id"
+    ],
+    "brands": [
+      "Hailiang 海亮",
+      "YAKAYA 亚凯亚"
     ]
   },
-  "assets": {
-    "logo": "",
-    "globalMap": "",
-    "sustainability": ""
+
+  /* 语言切换菜单：默认显示 Language，打开后选择语言。 */
+  "languageMenu": {
+    "label": "Language",
+    "options": [
+      { "code": "zh", "label": "中文" },
+      { "code": "en", "label": "English" },
+      { "code": "id", "label": "Bahasa Indonesia" }
+    ]
   },
+
+  /* 可选的 logo 图片；留空时顶栏使用 Y 字标记。 */
+  "assets": {
+    "logo": ""
+  },
+
+  /* 1) 搜索引擎标题、描述、关键词（每种语言各一份） */
   "siteMeta": {
     "zh": {
-      "title": "PT. YIMIAO HUANYU TECHNOLOGY INDONESIA｜印尼冷暖辅材、铜管与保温材料供应商",
-      "description": "億淼寰宇是印尼的冷暖辅材供应商，提供海亮铜管、铜配件、保温材料、PU 系列与制冷剂，并提供现货、配送、安装与售后支持。",
-      "keywords": "印尼冷暖辅材, 印尼铜管, 海亮铜管, 保温材料, PU 风板, 制冷剂, HVAC Indonesia"
+      "title": "印尼铜管·海亮铜管·分支管｜冷暖辅材供应商｜億淼寰宇",
+      "description": "億淼寰宇是印尼的冷暖辅材供应商，现货供应海亮铜管、铜盘管、分支管、铜配件、保温材料、PU 风板与制冷剂，并提供配送、安装与售后支持。",
+      "keywords": "印尼铜管, 海亮铜管, 海亮铜盘管, 铜管, 分支管, 保温铜管, 铜配件, 保温材料, PU 风板, 制冷剂, 印尼冷暖辅材, HVAC Indonesia"
     },
     "en": {
-      "title": "PT. YIMIAO HUANYU TECHNOLOGY INDONESIA | HVAC Materials Supplier in Indonesia",
-      "description": "YIMIAO HUANYU supplies copper tubes, fittings, insulation, PU panels and refrigerants in Indonesia, with warehouse stock, delivery, installation and after-sales support.",
-      "keywords": "HVAC materials Indonesia, copper tube Indonesia, Hailiang copper tube, insulation, PU panel, refrigerant, HVAC supplier"
+      "title": "Copper Tube Indonesia | Hailiang Copper Tube & HVAC Materials",
+      "description": "YIMIAO HUANYU supplies Hailiang copper tubes, branch pipes, copper fittings, insulation, PU duct panels and refrigerants in Indonesia, with ready stock, delivery and after-sales support.",
+      "keywords": "copper tube Indonesia, Hailiang copper tube, copper pancake coil, branch pipe, copper fittings, insulation, PU duct panel, refrigerant, HVAC materials Indonesia"
     },
     "id": {
-      "title": "PT. YIMIAO HUANYU TECHNOLOGY INDONESIA | Supplier Material HVAC di Indonesia",
-      "description": "YIMIAO HUANYU menyediakan pipa tembaga, fitting, insulasi, panel PU, dan refrigeran di Indonesia, dengan stok gudang, pengiriman, instalasi, dan layanan purnajual.",
-      "keywords": "material HVAC Indonesia, pipa tembaga Indonesia, pipa Hailiang, insulasi, panel PU, refrigeran, supplier HVAC"
+      "title": "Pipa Tembaga Indonesia | Pipa Hailiang & Material HVAC",
+      "description": "YIMIAO HUANYU menyediakan pipa tembaga Hailiang, pipa cabang, fitting tembaga, insulasi, panel PU, dan refrigeran di Indonesia, dengan stok siap kirim dan layanan purnajual.",
+      "keywords": "pipa tembaga Indonesia, pipa Hailiang, koil pancake, pipa cabang, fitting tembaga, insulasi, panel PU, refrigeran, material HVAC Indonesia"
     }
   },
+
+  /* 2) 每页配色。只有 home 和 vision 有大图，其他页用纯色。 */
+  "pageVisuals": {
+    "home": {
+      "image": "/assets/optimized/hvac-materials-hero.webp",
+      "bg": "#EAF5FF",
+      "text": "#123F69",
+      "accent": "#1689E8",
+      "soft": "#D5EBFF",
+      "muted": "#52779B",
+      "photo": 0.55
+    },
+    "about": {
+      "bg": "#FFFFFF",
+      "text": "#174A75",
+      "accent": "#117ED8",
+      "soft": "#E8F5FF",
+      "muted": "#537391"
+    },
+    "vision": {
+      "image": "/assets/optimized/仓库.webp",
+      "bg": "#DCEFFF",
+      "text": "#12436F",
+      "accent": "#087FCE",
+      "soft": "#C8E6FF",
+      "muted": "#3E6A91",
+      "photo": 0.5
+    },
+    "products": {
+      "bg": "#F6FBFF",
+      "text": "#163F66",
+      "accent": "#237FCA",
+      "soft": "#E4F2FF",
+      "muted": "#5A7790"
+    },
+    "solutions": {
+      "bg": "#E9F5FF",
+      "text": "#14456F",
+      "accent": "#1485DE",
+      "soft": "#D7EBFF",
+      "muted": "#4C6E8D"
+    },
+    "support": {
+      "bg": "#F4FAFF",
+      "text": "#173E65",
+      "accent": "#1D89DE",
+      "soft": "#E1F1FF",
+      "muted": "#54748F"
+    },
+    "gallery": {
+      "bg": "#FFFFFF",
+      "text": "#16436D",
+      "accent": "#258BE5",
+      "soft": "#E5F3FF",
+      "muted": "#557791"
+    },
+    "faq": {
+      "image": "",
+      "bg": "#FFFFFF",
+      "text": "#17466E",
+      "accent": "#1689E8",
+      "soft": "#EDF6FF",
+      "muted": "#5A7893"
+    },
+    "contact": {
+      "bg": "#EAF5FF",
+      "text": "#153F66",
+      "accent": "#157FD1",
+      "soft": "#D7EBFD",
+      "muted": "#4F7395"
+    }
+  },
+
+  /* 3) 产品分类（选项卡） */
   "productCategories": [
     "all",
     "tube",
@@ -46,13 +165,15 @@ window.siteContent = {
     "aluminum",
     "custom"
   ],
+
+  /* 4) 产品。加产品就复制一整段，改 no / image / 三语名字和文字。 */
   "products": [
     {
       "no": "01",
       "category": "tube",
       "image": "/assets/铜盘管.png",
       "tone": "copper",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮铜盘管",
         "en": "Hailiang Copper Coil",
@@ -69,7 +190,7 @@ window.siteContent = {
       "category": "tube",
       "image": "/assets/铜直管.png",
       "tone": "silver",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮铜直管",
         "en": "Hailiang Straight Copper Tube",
@@ -78,7 +199,7 @@ window.siteContent = {
       "text": {
         "zh": "稳定连接，可靠耐用单端扩口，安装便捷",
         "en": "Reliable and durable connections, with a flared end for easier installation.",
-        "id": "Sambungan andal dan tahan lama, dengan ujung yang dikembangkan untuk memudahkan pemasangan."
+        "id": "Sambungan andal dan tahan lama, dengan ujung yang sudah diflaring untuk memudahkan pemasangan."
       }
     },
     {
@@ -86,7 +207,6 @@ window.siteContent = {
       "category": "tube",
       "image": "/assets/保温铜管.png",
       "tone": "copper",
-      "link": "#contact",
       "name": {
         "zh": "保温铜管",
         "en": "Insulated Copper Tube",
@@ -103,11 +223,10 @@ window.siteContent = {
       "category": "tube",
       "image": "/assets/蚊香盘管.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "蚊香盘管",
         "en": "Copper Pancake Coil",
-        "id": "Koil Tembaga Pancake"
+        "id": "Koil Tembaga Gulung"
       },
       "text": {
         "zh": "高效导热，管壁均匀尺寸精准 · 品质可靠",
@@ -120,7 +239,7 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/分支管.png",
       "tone": "silver",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮分支管",
         "en": "Hailiang Copper Branch Pipe",
@@ -137,10 +256,10 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/海亮铜直接.png",
       "tone": "silver",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮铜直接",
-        "en": "Hailiang Copper Straight Connector",
+        "en": "Hailiang Copper Coupling",
         "id": "Sambungan Lurus Tembaga Hailiang"
       },
       "text": {
@@ -154,7 +273,7 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/海亮铜弯头.png",
       "tone": "dark",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮铜弯头",
         "en": "Hailiang Copper Elbow",
@@ -171,7 +290,6 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/铜三通.png",
       "tone": "copper",
-      "link": "#contact",
       "name": {
         "zh": "铜三通",
         "en": "Copper Tee",
@@ -188,7 +306,6 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/U型弯.png",
       "tone": "copper",
-      "link": "#contact",
       "name": {
         "zh": "U型弯",
         "en": "Copper U-Bend",
@@ -205,7 +322,7 @@ window.siteContent = {
       "category": "rod",
       "image": "/assets/海亮铜磷焊条.png",
       "tone": "copper",
-      "link": "#contact",
+      "brand": "Hailiang",
       "name": {
         "zh": "海亮铜磷焊条",
         "en": "Hailiang Copper-Phosphorus Brazing Rod",
@@ -222,7 +339,7 @@ window.siteContent = {
       "category": "foil",
       "image": "/assets/亚凯亚保温管.png",
       "tone": "silver",
-      "link": "#contact",
+      "brand": "YAKAYA",
       "name": {
         "zh": "亚凯亚保温管",
         "en": "YAKAYA Rubber Foam Insulation Pipe",
@@ -239,7 +356,7 @@ window.siteContent = {
       "category": "foil",
       "image": "/assets/亚凯亚保温板.png",
       "tone": "silver",
-      "link": "#contact",
+      "brand": "YAKAYA",
       "name": {
         "zh": "亚凯亚保温板",
         "en": "YAKAYA Rubber Foam Insulation Board",
@@ -256,7 +373,6 @@ window.siteContent = {
       "category": "foil",
       "image": "/assets/彩色保温管.png",
       "tone": "silver",
-      "link": "#contact",
       "name": {
         "zh": "彩色保温管",
         "en": "Custom-Color Insulation Pipe",
@@ -273,7 +389,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/保温铝板风板.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "保温铝板风板",
         "en": "Insulated Aluminum Duct Panel",
@@ -290,7 +405,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/单面彩钢酚醛风板.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "单面彩钢酚醛风板",
         "en": "Single-Sided Color-Steel Phenolic Duct Panel",
@@ -307,7 +421,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/风板推刀.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "风板推刀",
         "en": "Duct Board Cutter",
@@ -324,7 +437,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/风板推刀刀片.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "风板推刀刀片",
         "en": "Duct Board Cutter Blade",
@@ -341,7 +453,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/F型法兰.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "F型法兰",
         "en": "F-Type Flange",
@@ -358,7 +469,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/H型法兰.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "H型法兰",
         "en": "H-Type Flange",
@@ -375,7 +485,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/隐形法兰.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "隐形法兰",
         "en": "Concealed Flange",
@@ -392,7 +501,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/挤塑板侧法兰.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "挤塑板侧法兰",
         "en": "XPS Board Side Flange",
@@ -409,7 +517,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/包边角.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "包边角",
         "en": "Edge Trim Corner",
@@ -426,7 +533,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/挤塑板镀锌弯头.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "挤塑板镀锌弯头",
         "en": "Galvanized Elbow for XPS Duct Board",
@@ -443,7 +549,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/H型卡扣.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "H型卡扣",
         "en": "H-Type Clip",
@@ -460,7 +565,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/铝箔胶带.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "铝箔胶带",
         "en": "Aluminum Foil Tape",
@@ -477,7 +581,6 @@ window.siteContent = {
       "category": "aluminum",
       "image": "/assets/挤塑板胶水.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "挤塑板胶水",
         "en": "XPS Board Adhesive",
@@ -494,7 +597,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R32制冷剂.png",
       "tone": "blue",
-      "link": "#contact",
       "name": {
         "zh": "R32制冷剂",
         "en": "R32 Refrigerant",
@@ -502,7 +604,7 @@ window.siteContent = {
       },
       "text": {
         "zh": "高效制冷，节能环保性能稳定，纯净可靠",
-        "en": "Efficient cooling, energy-efficient performance, stable operation and reliable purity.",
+        "en": "Efficient cooling, energy saving, stable performance and reliable purity.",
         "id": "Pendinginan efisien, hemat energi, kinerja stabil, dan kemurnian yang andal."
       }
     },
@@ -511,7 +613,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R410A制冷剂.png",
       "tone": "dark",
-      "link": "#contact",
       "name": {
         "zh": "R410A制冷剂",
         "en": "R410A Refrigerant",
@@ -519,7 +620,7 @@ window.siteContent = {
       },
       "text": {
         "zh": "高效制冷，节能环保性能稳定，纯净可靠",
-        "en": "Efficient cooling, energy-efficient performance, stable operation and reliable purity.",
+        "en": "Efficient cooling, energy saving, stable performance and reliable purity.",
         "id": "Pendinginan efisien, hemat energi, kinerja stabil, dan kemurnian yang andal."
       }
     },
@@ -528,7 +629,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R22A制冷剂.png",
       "tone": "dark",
-      "link": "#contact",
       "name": {
         "zh": "R22制冷剂",
         "en": "R22 Refrigerant",
@@ -545,7 +645,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R134A制冷剂.png",
       "tone": "dark",
-      "link": "#contact",
       "name": {
         "zh": "R134A制冷剂",
         "en": "R134A Refrigerant",
@@ -553,7 +652,7 @@ window.siteContent = {
       },
       "text": {
         "zh": "高效制冷，节能环保性能稳定，纯净可靠",
-        "en": "Efficient cooling, energy-efficient performance, stable operation and reliable purity.",
+        "en": "Efficient cooling, energy saving, stable performance and reliable purity.",
         "id": "Pendinginan efisien, hemat energi, kinerja stabil, dan kemurnian yang andal."
       }
     },
@@ -562,7 +661,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R404A制冷剂.png",
       "tone": "dark",
-      "link": "#contact",
       "name": {
         "zh": "R404A制冷剂",
         "en": "R404A Refrigerant",
@@ -570,7 +668,7 @@ window.siteContent = {
       },
       "text": {
         "zh": "高效制冷，节能环保性能稳定，纯净可靠",
-        "en": "Efficient cooling, energy-efficient performance, stable operation and reliable purity.",
+        "en": "Efficient cooling, energy saving, stable performance and reliable purity.",
         "id": "Pendinginan efisien, hemat energi, kinerja stabil, dan kemurnian yang andal."
       }
     },
@@ -579,7 +677,6 @@ window.siteContent = {
       "category": "custom",
       "image": "/assets/R507A制冷剂.png",
       "tone": "dark",
-      "link": "#contact",
       "name": {
         "zh": "R507A",
         "en": "R507A Refrigerant",
@@ -587,15 +684,15 @@ window.siteContent = {
       },
       "text": {
         "zh": "高效制冷，节能环保性能稳定，纯净可靠",
-        "en": "Efficient cooling, energy-efficient performance, stable operation and reliable purity.",
+        "en": "Efficient cooling, energy saving, stable performance and reliable purity.",
         "id": "Pendinginan efisien, hemat energi, kinerja stabil, dan kemurnian yang andal."
       }
     }
   ],
+
+  /* 5) 解决方案 */
   "solutions": [
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "家用空调安装",
         "en": "Residential AC Installation",
@@ -603,8 +700,6 @@ window.siteContent = {
       }
     },
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "商用空调项目",
         "en": "Commercial HVAC Projects",
@@ -612,17 +707,13 @@ window.siteContent = {
       }
     },
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "冷库材料供应",
         "en": "Cold Storage Materials Supply",
-        "id": "Pasokan Material Cold Storage"
+        "id": "Pasokan Material Gudang Pendingin"
       }
     },
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "数据中心项目",
         "en": "Data Center Projects",
@@ -630,8 +721,6 @@ window.siteContent = {
       }
     },
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "新风材料供应",
         "en": "Fresh-Air Ventilation Materials",
@@ -639,8 +728,6 @@ window.siteContent = {
       }
     },
     {
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "各种配件供应",
         "en": "HVAC Accessories Supply",
@@ -648,6 +735,8 @@ window.siteContent = {
       }
     }
   ],
+
+  /* 6) 服务支持 */
   "support": [
     {
       "label": {
@@ -655,8 +744,6 @@ window.siteContent = {
         "en": "Consult",
         "id": "Konsultasi"
       },
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "产品咨询",
         "en": "Product Inquiry",
@@ -674,8 +761,6 @@ window.siteContent = {
         "en": "After-Sales",
         "id": "Purnajual"
       },
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "售后服务",
         "en": "After-Sales Service",
@@ -693,8 +778,6 @@ window.siteContent = {
         "en": "Products",
         "id": "Produk"
       },
-      "image": "",
-      "link": "#contact",
       "title": {
         "zh": "资料下载",
         "en": "Downloads",
@@ -707,6 +790,8 @@ window.siteContent = {
       }
     }
   ],
+
+  /* 7) 企业画廊 */
   "gallery": [
     {
       "image": "/assets/仓库现货.png",
@@ -754,51 +839,184 @@ window.siteContent = {
       }
     }
   ],
-  "news": [
+
+  /* 8) 常见问题（同时写进 FAQ 结构化数据和 llms.txt） */
+  "faq": {
+    "eyebrow": {
+      "zh": "常见问题",
+      "en": "FAQ",
+      "id": "PERTANYAAN UMUM"
+    },
+    "title": {
+      "zh": "关于印尼铜管<br>你可能想问的",
+      "en": "Questions About Copper Tubes<br>in Indonesia",
+      "id": "Pertanyaan Tentang Pipa Tembaga<br>di Indonesia"
+    },
+    "text": {
+      "zh": "库存、规格、配套和交期，都可以直接问我们；下面先整理最常见的几项。",
+      "en": "Stock, sizes, matching accessories and lead time — ask us directly. Here are the questions we hear most often.",
+      "id": "Stok, ukuran, aksesori pendukung, dan waktu kirim—tanyakan langsung kepada kami. Berikut pertanyaan yang paling sering kami terima."
+    },
+    "items": [
+      {
+        "q": {
+          "zh": "你们在印尼主要供应哪些产品？",
+          "en": "What products do you supply in Indonesia?",
+          "id": "Produk apa saja yang Anda sediakan di Indonesia?"
+        },
+        "a": {
+          "zh": "我们常备海亮铜盘管、铜直管、保温铜管、蚊香盘管、分支管、铜直接、铜弯头、铜三通等铜管与铜配件，也供应保温材料、PU 风板、辅材和 R22、R32、R410A、R134A 等制冷剂。具体规格和库存请咨询我们的销售团队。",
+          "en": "We keep Hailiang copper pancake coils, straight copper tubes, insulated copper tubes, branch pipes, straight connectors, elbows and tees in stock, together with insulation materials, PU duct panels, accessories and refrigerants such as R22, R32, R410A and R134A. Please contact our sales team for current sizes and stock.",
+          "id": "Kami menyediakan stok koil tembaga Hailiang, pipa tembaga lurus, pipa tembaga berinsulasi, pipa cabang, sambungan lurus, siku, dan tee, serta material insulasi, panel saluran udara PU, aksesori, dan refrigeran seperti R22, R32, R410A, dan R134A. Hubungi tim penjualan kami untuk ukuran dan stok terkini."
+        }
+      },
+      {
+        "q": {
+          "zh": "铜管常用规格有哪些？",
+          "en": "What copper tube sizes are commonly available?",
+          "id": "Ukuran pipa tembaga apa yang umum tersedia?"
+        },
+        "a": {
+          "zh": "空调和制冷行业常用铜管规格包括：1/4 英寸、3/8 英寸、1/2 英寸、5/8 英寸、3/4 英寸、7/8 英寸、1 英寸、1-1/8 英寸、1-1/4 英寸、1-3/8 英寸、1-1/2 英寸、1-5/8 英寸、1-3/4 英寸。分为盘管和直管，壁厚可根据使用压力和项目要求选择。告诉我们您的项目需求和数量，我们可以为您匹配合适的规格。",
+          "en": "Common copper tube sizes used in air-conditioning and refrigeration include 1/4\", 3/8\", 1/2\", 5/8\", 3/4\", 7/8\", 1\", 1-1/8\", 1-1/4\", 1-3/8\", 1-1/2\", 1-5/8\" and 1-3/4\". They are supplied as pancake coils or straight lengths, and wall thickness can be selected according to working pressure and project requirements. Tell us your project requirements and quantity, and we will help match the right sizes.",
+          "id": "Ukuran pipa tembaga yang umum digunakan untuk AC dan refrigerasi meliputi 1/4 inci, 3/8 inci, 1/2 inci, 5/8 inci, 3/4 inci, 7/8 inci, 1 inci, 1-1/8 inci, 1-1/4 inci, 1-3/8 inci, 1-1/2 inci, 1-5/8 inci, dan 1-3/4 inci. Tersedia dalam bentuk koil atau batang lurus, dengan ketebalan dinding yang dapat disesuaikan dengan tekanan kerja dan kebutuhan proyek. Beri tahu kami kebutuhan proyek dan jumlahnya, kami akan membantu mencocokkan ukuran yang tepat."
+        }
+      },
+      {
+        "q": {
+          "zh": "分支管（分歧管）怎么选？",
+          "en": "How do I choose a branch pipe?",
+          "id": "Bagaimana memilih pipa cabang?"
+        },
+        "a": {
+          "zh": "分支管按室内机数量、单机冷量和主管/支管管径来选。多联机系统建议按厂家冷量表和管径表匹配，避免支管过细导致冷量不足。我们可以根据你的系统图和室内机清单协助选型。",
+          "en": "Branch pipes are selected by the number of indoor units, each unit's capacity and the main/branch pipe diameters. For multi-split systems, match them against the manufacturer's capacity and pipe-size tables so the branch line is not undersized. We can help select the right model from your system drawing and indoor-unit list.",
+          "id": "Pipa cabang dipilih berdasarkan jumlah unit indoor, kapasitas tiap unit, serta diameter pipa utama dan pipa cabang. Untuk sistem multi-split, cocokkan dengan tabel kapasitas dan ukuran pipa dari pabrikan agar pipa cabang tidak terlalu kecil. Kami dapat membantu memilih model yang tepat berdasarkan gambar sistem dan daftar unit indoor Anda."
+        }
+      },
+      {
+        "q": {
+          "zh": "有现货吗？多久能发货？",
+          "en": "Do you keep stock, and how fast can you deliver?",
+          "id": "Apakah ada stok dan berapa lama pengirimannya?"
+        },
+        "a": {
+          "zh": "我们在印尼设有仓库，常备常用规格的铜管、保温材料和制冷剂。现货一般可在确认订单后尽快安排出库，具体交期取决于规格、数量和配送地区，下单前请与销售确认。",
+          "en": "We hold stock of popular copper tube sizes, insulation materials and refrigerants in our Indonesian warehouse. In-stock items can usually be released soon after order confirmation; the exact lead time depends on size, quantity and delivery area, so please confirm with our sales team before ordering.",
+          "id": "Kami menyimpan stok ukuran pipa tembaga, material insulasi, dan refrigeran yang populer di gudang kami di Indonesia. Barang yang tersedia biasanya dapat dikeluarkan segera setelah konfirmasi pesanan; waktu pengiriman tepatnya bergantung pada ukuran, jumlah, dan wilayah pengiriman, jadi konfirmasikan dengan tim penjualan sebelum memesan."
+        }
+      },
+      {
+        "q": {
+          "zh": "铜管和保温管怎么配套？",
+          "en": "How do I match insulation with copper tubes?",
+          "id": "Bagaimana menyesuaikan insulasi dengan pipa tembaga?"
+        },
+        "a": {
+          "zh": "保温管内径要与铜管外径匹配，例如 9.52 mm 铜管配对应内径的保温管；保温层厚度按环境温度、湿度和是否防结露来选择。需要成套配货时，把铜管规格清单发给我们即可。",
+          "en": "The insulation's inner diameter should match the copper tube's outside diameter — for example, a 9.52 mm tube needs the matching insulation size. Insulation thickness depends on ambient temperature, humidity and condensation risk. Send us your copper tube list and we will quote a complete set.",
+          "id": "Diameter dalam insulasi harus sesuai dengan diameter luar pipa tembaga—misalnya pipa 9,52 mm memerlukan ukuran insulasi yang sesuai. Ketebalan insulasi bergantung pada suhu lingkungan, kelembapan, dan risiko kondensasi. Kirimkan daftar pipa tembaga Anda dan kami akan menyiapkan satu set lengkap."
+        }
+      },
+      {
+        "q": {
+          "zh": "可以配送到印尼各地吗？支持哪些语言？",
+          "en": "Can you deliver across Indonesia, and which languages do you support?",
+          "id": "Apakah bisa kirim ke seluruh Indonesia, dan bahasa apa yang didukung?"
+        },
+        "a": {
+          "zh": "可以按项目地址安排配送，具体运费和时效以下单时确认。我们的团队可以用中文、英文和印尼语沟通，WhatsApp 和微信都可以联系。",
+          "en": "We can arrange delivery to your project address; freight cost and lead time are confirmed when you order. Our team communicates in Chinese, English and Indonesian via WhatsApp or WeChat.",
+          "id": "Kami dapat mengatur pengiriman ke alamat proyek Anda; biaya dan waktu kirim dikonfirmasi saat pemesanan. Tim kami dapat berkomunikasi dalam bahasa Mandarin, Inggris, dan Indonesia melalui WhatsApp atau WeChat."
+        }
+      },
+      {
+        "q": {
+          "zh": "億淼寰宇的产品品质怎么确认？",
+          "en": "How can I verify the quality of YIMIAO HUANYU products?",
+          "id": "Bagaimana cara memastikan kualitas produk YIMIAO HUANYU?"
+        },
+        "a": {
+          "zh": "我们经营的产品均来自正规采购渠道，到货会核对规格、包装和批次信息。需要技术资料或质量文件时，可以在下单前告诉我们具体型号和用途，我们会提供可提供的资料。",
+          "en": "All products we supply come through regular purchasing channels, and we check specifications, packaging and batch information on arrival. If you need technical data or quality documents, tell us the model and application before ordering, and we will provide the documents available for the actual batch.",
+          "id": "Semua produk yang kami sediakan diperoleh melalui saluran pembelian resmi, dan kami memeriksa spesifikasi, kemasan, serta informasi batch saat barang tiba. Jika Anda memerlukan data teknis atau dokumen kualitas, beri tahu kami model dan penggunaannya sebelum memesan, dan kami akan menyediakan dokumen yang tersedia untuk batch tersebut."
+        }
+      }
+    ]
+  },
+
+  /* 9) 页脚热门搜索，href 写 #product-01 或 #products / #contact */
+  "hotSearches": [
     {
-      "date": "2026.08.18",
-      "type": {
-        "zh": "公司新闻",
-        "en": "Company News",
-        "id": "Berita Perusahaan"
+      "label": {
+        "zh": "印尼铜管",
+        "en": "Copper tube Indonesia",
+        "id": "Pipa tembaga Indonesia"
       },
-      "title": {
-        "zh": "以绿色制造为基石，推动产业高质量发展",
-        "en": "Driving High-Quality Industry Growth Through Green Manufacturing",
-        "id": "Mendorong Pertumbuhan Industri Berkualitas melalui Manufaktur Hijau"
-      },
-      "link": "#contact"
+      "href": "#products"
     },
     {
-      "date": "2026.07.05",
-      "type": {
-        "zh": "行业资讯",
-        "en": "Industry News",
-        "id": "Berita Industri"
+      "label": {
+        "zh": "海亮铜管",
+        "en": "Hailiang copper tube",
+        "id": "Pipa Hailiang"
       },
-      "title": {
-        "zh": "新材料技术应用，打开产业协同新空间",
-        "en": "New Material Applications Create Opportunities for Industry Collaboration",
-        "id": "Aplikasi Material Baru Membuka Peluang Kolaborasi Industri"
-      },
-      "link": "#contact"
+      "href": "#product-01"
     },
     {
-      "date": "2026.06.20",
-      "type": {
-        "zh": "公司新闻",
-        "en": "Company News",
-        "id": "Berita Perusahaan"
+      "label": {
+        "zh": "分支管",
+        "en": "Branch pipe",
+        "id": "Pipa cabang"
       },
-      "title": {
-        "zh": "全球化服务网络再升级，贴近客户需求",
-        "en": "Upgrading Our Global Service Network to Better Serve Customers",
-        "id": "Peningkatan Jaringan Layanan Global agar Lebih Dekat dengan Pelanggan"
+      "href": "#product-05"
+    },
+    {
+      "label": {
+        "zh": "海亮铜直管",
+        "en": "Straight copper tube",
+        "id": "Pipa tembaga lurus"
       },
-      "link": "#contact"
+      "href": "#product-02"
+    },
+    {
+      "label": {
+        "zh": "保温铜管",
+        "en": "Insulated copper tube",
+        "id": "Pipa tembaga berinsulasi"
+      },
+      "href": "#product-03"
+    },
+    {
+      "label": {
+        "zh": "保温材料",
+        "en": "Insulation materials",
+        "id": "Material insulasi"
+      },
+      "href": "#product-11"
+    },
+    {
+      "label": {
+        "zh": "PU 风板",
+        "en": "PU duct panel",
+        "id": "Panel PU"
+      },
+      "href": "#product-14"
+    },
+    {
+      "label": {
+        "zh": "R32 制冷剂",
+        "en": "R32 refrigerant",
+        "id": "Refrigeran R32"
+      },
+      "href": "#product-27"
     }
   ],
+
+  /* 10) 联系方式 */
   "contactMainLink": "mailto:yimiaohuanyu@gmail.com",
+
+  /* WhatsApp 与微信二维码 */
   "contactLinks": [
     {
       "type": "link",
@@ -859,6 +1077,8 @@ window.siteContent = {
       }
     }
   ],
+
+  /* 11) 三语界面文字。中文是基准，英文/印尼语必须同步。 */
   "locales": {
     "zh": {
       "utility": {
@@ -872,15 +1092,12 @@ window.siteContent = {
         "products": "产品中心",
         "solutions": "解决方案",
         "support": "服务支持",
-        "news": "新闻媒体",
         "contact": "联系我们"
       },
       "actions": {
         "learnMore": "了解更多",
         "discover": "探索我们的故事",
         "productInquiry": "产品咨询",
-        "loadMore": "加载更多产品",
-        "viewAll": "查看全部资讯",
         "contactUs": "联系我们",
         "backTop": "回到顶部 ↑"
       },
@@ -890,31 +1107,9 @@ window.siteContent = {
         "text": "为印尼伙伴提供更可靠、更省心的材料供应方案"
       },
       "about": {
-        "title": "浙江海亮铜管<br>印尼唯一代理",
-        "text": "海亮股份是全球铜管加工行业的领先企业，连续6年位居全球铜管出货量第一，为空调制冷及暖通行业提供值得信赖的铜管产品。億淼寰宇致力于将海亮的优质产品与品牌价值带给更多印尼用户。我们提供现货供应、产品选型和采购服务。让用户买得放心、用的省心。"
+        "title": "要做印尼最全面的<br>冷暖辅材供应商",
+        "text": "億淼寰宇是印尼的冷暖辅材供应商之一，以庞大的库存储备和专业的服务为基础。我们致力于将优质制冷材料与品牌价值带给更多印尼用户。我们提供现货供应、产品选型和采购服务。让用户买得放心、用的省心。"
       },
-      "stats": [
-        {
-          "number": "832",
-          "suffix": "亿+",
-          "label": "年度营收规模"
-        },
-        {
-          "number": "23",
-          "suffix": "个",
-          "label": "全球生产基地"
-        },
-        {
-          "number": "900",
-          "suffix": "+",
-          "label": "授权专利数量"
-        },
-        {
-          "number": "100",
-          "suffix": "+",
-          "label": "服务国家及地区"
-        }
-      ],
       "vision": {
         "eyebrow": "OUR VISION",
         "title": "成为您在印尼的<br>冷暖辅材仓库"
@@ -937,36 +1132,11 @@ window.siteContent = {
       "support": {
         "title": "全程服务<br>让合作更简单"
       },
-      "global": {
-        "title": "布局全球<br>服务世界",
-        "text": "以全球制造与服务网络，快速响应世界各地客户的需求。",
-        "stats": [
-          {
-            "number": "23",
-            "label": "主要生产基地"
-          },
-          {
-            "number": "100+",
-            "label": "服务国家及地区"
-          },
-          {
-            "number": "50+",
-            "label": "全球营销网点"
-          }
-        ]
-      },
-      "sustainability": {
-        "title": "绿色制造<br>共创可持续未来",
-        "text": "将环境责任融入研发、生产和运营的每一个环节。"
-      },
       "gallery": {
         "title": "企业画廊"
       },
-      "news": {
-        "title": "最新动态"
-      },
       "contact": {
-        "title": "让我们开启对话",
+        "title": "让我们<br>开启对话",
         "text": "欢迎通过以下方式与我们联系。"
       },
       "labels": {
@@ -988,11 +1158,7 @@ window.siteContent = {
         "close": "关闭",
         "defaultDetailText": "了解更多产品信息、技术参数及适用场景，欢迎联系我们获取详细资料。",
         "qrDialog": "二维码放大预览",
-        "languageNames": {
-          "zh": "中文",
-          "en": "英文",
-          "id": "印尼语"
-        },
+        "hotSearches": "热门搜索",
         "qrGeneric": "二维码"
       }
     },
@@ -1008,15 +1174,12 @@ window.siteContent = {
         "products": "Products",
         "solutions": "Solutions",
         "support": "Support",
-        "news": "News",
         "contact": "Contact"
       },
       "actions": {
         "learnMore": "Learn more",
         "discover": "Discover our story",
         "productInquiry": "Product inquiry",
-        "loadMore": "Load more products",
-        "viewAll": "View all news",
         "contactUs": "Contact us",
         "backTop": "Back to top ↑"
       },
@@ -1026,31 +1189,9 @@ window.siteContent = {
         "text": "Reliable, convenient material supply solutions for our partners across Indonesia."
       },
       "about": {
-        "title": "Hailiang Copper Tubes<br>Exclusive Distributor in Indonesia",
-        "text": "Hailiang Co., Ltd. is a leading global copper tube processor and has ranked No. 1 worldwide in copper tube shipment volume for six consecutive years. It supplies trusted copper tube products to the air-conditioning, refrigeration and HVAC industries. YIMIAO HUANYU brings Hailiang’s quality products and brand value to more customers in Indonesia. We provide ready stock, product selection support and purchasing services—so customers can buy with confidence and use products with peace of mind."
+        "title": "Aiming to Be Indonesia's Most Comprehensive HVAC Materials Supplier",
+        "text": "YIMIAO HUANYU is one of Indonesia's HVAC materials suppliers, backed by large warehouse stock and professional service. We are committed to bringing quality refrigeration materials and brand value to more Indonesian customers. We provide ready stock, product selection support and purchasing services, so customers can buy with confidence and use with peace of mind."
       },
-      "stats": [
-        {
-          "number": "83.2",
-          "suffix": "B+",
-          "label": "Annual revenue"
-        },
-        {
-          "number": "23",
-          "suffix": "",
-          "label": "Production bases"
-        },
-        {
-          "number": "900",
-          "suffix": "+",
-          "label": "Granted patents"
-        },
-        {
-          "number": "100",
-          "suffix": "+",
-          "label": "Countries and regions served"
-        }
-      ],
       "vision": {
         "eyebrow": "OUR VISION",
         "title": "Your HVAC Materials<br>Warehouse in Indonesia"
@@ -1073,36 +1214,11 @@ window.siteContent = {
       "support": {
         "title": "End-to-End Support<br>for Easier Cooperation"
       },
-      "global": {
-        "title": "Global Reach<br>Serving the World",
-        "text": "Our global manufacturing and service network helps us respond quickly to customer needs around the world.",
-        "stats": [
-          {
-            "number": "23",
-            "label": "Production bases"
-          },
-          {
-            "number": "100+",
-            "label": "Markets served"
-          },
-          {
-            "number": "50+",
-            "label": "Sales locations"
-          }
-        ]
-      },
-      "sustainability": {
-        "title": "Green Manufacturing<br>for a Sustainable Future",
-        "text": "We integrate environmental responsibility into every stage of research and development, production and operations."
-      },
       "gallery": {
         "title": "Company Gallery"
       },
-      "news": {
-        "title": "Latest News"
-      },
       "contact": {
-        "title": "Let’s Start a Conversation",
+        "title": "Let's Start a Conversation",
         "text": "Please contact us through any of the channels below."
       },
       "labels": {
@@ -1124,11 +1240,7 @@ window.siteContent = {
         "close": "Close",
         "defaultDetailText": "Learn more about product information, technical specifications and applications. Contact us for details.",
         "qrDialog": "Enlarged QR code preview",
-        "languageNames": {
-          "zh": "Chinese",
-          "en": "English",
-          "id": "Indonesian"
-        },
+        "hotSearches": "Popular searches",
         "qrGeneric": "QR code"
       }
     },
@@ -1144,15 +1256,12 @@ window.siteContent = {
         "products": "Produk",
         "solutions": "Solusi",
         "support": "Layanan",
-        "news": "Berita",
         "contact": "Kontak"
       },
       "actions": {
         "learnMore": "Selengkapnya",
         "discover": "Temukan cerita kami",
         "productInquiry": "Konsultasi produk",
-        "loadMore": "Muat lebih banyak",
-        "viewAll": "Lihat semua berita",
         "contactUs": "Hubungi kami",
         "backTop": "Kembali ke atas ↑"
       },
@@ -1162,31 +1271,9 @@ window.siteContent = {
         "text": "Solusi pasokan material yang andal dan praktis bagi mitra kami di seluruh Indonesia."
       },
       "about": {
-        "title": "Pipa Tembaga Hailiang<br>Distributor Eksklusif di Indonesia",
-        "text": "Hailiang Co., Ltd. merupakan perusahaan terkemuka dunia dalam pengolahan pipa tembaga dan telah menempati peringkat pertama dunia berdasarkan volume pengiriman pipa tembaga selama enam tahun berturut-turut. Hailiang menyediakan produk pipa tembaga tepercaya untuk industri AC, refrigerasi, dan HVAC. YIMIAO HUANYU menghadirkan produk berkualitas dan nilai merek Hailiang bagi lebih banyak pelanggan di Indonesia. Kami menyediakan stok siap kirim, bantuan pemilihan produk, dan layanan pengadaan agar pelanggan dapat membeli dengan yakin dan menggunakan produk dengan tenang."
+        "title": "Berupaya Menjadi Supplier Material HVAC Paling Lengkap di Indonesia",
+        "text": "YIMIAO HUANYU adalah salah satu supplier material HVAC di Indonesia, dengan dukungan stok gudang yang besar dan layanan profesional. Kami berkomitmen menghadirkan material refrigerasi berkualitas dan nilai merek bagi lebih banyak pelanggan di Indonesia. Kami menyediakan stok siap kirim, bantuan pemilihan produk, dan layanan pengadaan, sehingga pelanggan dapat membeli dengan yakin dan menggunakan produk dengan tenang."
       },
-      "stats": [
-        {
-          "number": "83,2",
-          "suffix": "B+",
-          "label": "Pendapatan tahunan"
-        },
-        {
-          "number": "23",
-          "suffix": "",
-          "label": "Basis produksi"
-        },
-        {
-          "number": "900",
-          "suffix": "+",
-          "label": "Paten yang diberikan"
-        },
-        {
-          "number": "100",
-          "suffix": "+",
-          "label": "Negara dan wilayah yang dilayani"
-        }
-      ],
       "vision": {
         "eyebrow": "VISI KAMI",
         "title": "Gudang Material HVAC Anda<br>di Indonesia"
@@ -1209,33 +1296,8 @@ window.siteContent = {
       "support": {
         "title": "Dukungan Menyeluruh<br>untuk Kerja Sama yang Mudah"
       },
-      "global": {
-        "title": "Jangkauan Global<br>Melayani Dunia",
-        "text": "Jaringan manufaktur dan layanan global kami membantu merespons kebutuhan pelanggan di seluruh dunia dengan cepat.",
-        "stats": [
-          {
-            "number": "23",
-            "label": "Basis produksi"
-          },
-          {
-            "number": "100+",
-            "label": "Negara & wilayah"
-          },
-          {
-            "number": "50+",
-            "label": "Lokasi penjualan"
-          }
-        ]
-      },
-      "sustainability": {
-        "title": "Manufaktur Hijau<br>untuk Masa Depan Berkelanjutan",
-        "text": "Kami mengintegrasikan tanggung jawab lingkungan ke dalam setiap tahap penelitian dan pengembangan, produksi, serta operasional."
-      },
       "gallery": {
         "title": "Galeri Perusahaan"
-      },
-      "news": {
-        "title": "Berita Terkini"
       },
       "contact": {
         "title": "Mari Mulai Percakapan",
@@ -1260,11 +1322,7 @@ window.siteContent = {
         "close": "Tutup",
         "defaultDetailText": "Pelajari informasi produk, spesifikasi teknis, dan aplikasinya. Hubungi kami untuk informasi lebih lanjut.",
         "qrDialog": "Pratinjau kode QR yang diperbesar",
-        "languageNames": {
-          "zh": "Mandarin",
-          "en": "Inggris",
-          "id": "Bahasa Indonesia"
-        },
+        "hotSearches": "Pencarian populer",
         "qrGeneric": "Kode QR"
       }
     }

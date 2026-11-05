@@ -1,37 +1,53 @@
 /*
- * 1.1 预渲染脚本
- * 作用：把 content.js 里的文字直接写进 HTML，生成中文首页、/en/、/id/ 三套静态页面。
- * 这样即使 AI 爬虫不执行 JavaScript，也能读到完整标题、产品、服务和联系方式。
+ * 1.1.3 预渲染脚本
  *
- * 用法：在网站根目录运行
- *   node build/build.js
- * 或
- *   npm run build
+ * 作用：把 content.js 里的内容直接写进 HTML，生成中文首页、/en/、/id/ 三套静态页面。
+ * 这样即使 AI 爬虫不执行 JavaScript，也能读到完整标题、产品、FAQ 和联系方式。
+ *
+ * 用法（在网站根目录）：
+ *   node build/build.js           一次性生成
+ *   node build/build.js --watch   修改 content.js 后自动重新生成
+ *   npm run build                 等同于第一条
+ *
+ * 这个文件是“程序”，一般不需要改。要改文字请打开 content.js。
  */
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..');
-const SITE_URL = 'https://yimiaohuanyu.com';
-const TODAY = new Date().toISOString().slice(0, 10);
+const CONTENT_FILE = path.join(ROOT, 'content.js');
+const TEMPLATE_FILE = path.join(__dirname, 'template.html');
+const DEFAULT_SITE_URL = 'https://yimiaohuanyu.com';
+
+/* 每次 build 都会重新读取 content.js，方便 --watch 连续生成。 */
+let D = null;
+let SITE_URL = DEFAULT_SITE_URL;
+let TODAY = '';
 
 function loadContent() {
   const sandbox = { window: {} };
   vm.createContext(sandbox);
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'content.js'), 'utf8'), sandbox, { filename: 'content.js' });
+  vm.runInContext(fs.readFileSync(CONTENT_FILE, 'utf8'), sandbox, { filename: 'content.js' });
+  if (!sandbox.window.siteContent) {
+    throw new Error('content.js 里没有找到 window.siteContent，请检查文件开头和结尾的括号。');
+  }
   return sandbox.window.siteContent;
 }
-
-const d = loadContent();
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (ch) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
 }[ch]));
 
 const readPath = (object, key) => key.split('.').reduce((value, part) => value?.[part], object);
-const t = (lang, key) => readPath(d.locales[lang], key) ?? readPath(d.locales.zh, key) ?? '';
+
+/* t：界面文字（简体/英文/印尼文三份）；找不到时退回中文。 */
+const t = (lang, key) => readPath(D.locales[lang], key) ?? readPath(D.locales.zh, key) ?? '';
+
+/* l：带 zh/en/id 的对象（如 name、title、text）。 */
 const l = (lang, localized) => localized?.[lang] ?? localized?.zh ?? '';
+
+const stripHtml = (value) => String(value ?? '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim();
 
 const optimized = (url) => {
   if (!url) return '';
@@ -39,14 +55,45 @@ const optimized = (url) => {
   return url.replace(/^\/?assets\//, '/assets/optimized/').replace(/\.(png|jpe?g)$/i, '.webp');
 };
 
-const pages = [
-  { lang: 'zh', htmlLang: 'zh-CN', dir: '', url: `${SITE_URL}/`, ogLocale: 'zh_CN' },
-  { lang: 'en', htmlLang: 'en', dir: 'en', url: `${SITE_URL}/en/`, ogLocale: 'en_US' },
-  { lang: 'id', htmlLang: 'id', dir: 'id', url: `${SITE_URL}/id/`, ogLocale: 'id_ID' }
-];
+const visual = (key) => D.pageVisuals?.[key] || {};
+const pageImage = (key) => visual(key).image || '';
 
+function pageStyle(key) {
+  const item = visual(key);
+  const pairs = [
+    ['--page-bg', item.bg],
+    ['--page-text', item.text],
+    ['--page-accent', item.accent],
+    ['--page-soft', item.soft],
+    ['--page-muted', item.muted],
+    ['--page-photo', item.photo]
+  ];
+  return pairs
+    .filter(([, value]) => value !== undefined && value !== null && value !== '')
+    .map(([name, value]) => `${name}:${value}`)
+    .join(';');
+}
+
+function backgroundStyle(key) {
+  const image = pageImage(key);
+  return image ? `background-image:url('${esc(image)}')` : '';
+}
+
+function imageClass(key) {
+  return pageImage(key) ? ' has-image' : '';
+}
+
+const pages = [
+  { lang: 'zh', htmlLang: 'zh-CN', dir: '', url: '/', ogLocale: 'zh_CN' },
+  { lang: 'en', htmlLang: 'en', dir: 'en', url: '/en/', ogLocale: 'en_US' },
+  { lang: 'id', htmlLang: 'id', dir: 'id', url: '/id/', ogLocale: 'id_ID' }
+].map((page) => ({ ...page, url: `${SITE_URL}${page.url}` }));
+
+/* --------------------------------------------------------------------
+   1. 页面 <head>：hreflang、Open Graph、Twitter Card
+   -------------------------------------------------------------------- */
 function headMeta(page) {
-  const meta = d.siteMeta[page.lang];
+  const meta = D.siteMeta[page.lang];
   const alternates = [
     `<link rel="alternate" hreflang="zh-CN" href="${SITE_URL}/">`,
     `<link rel="alternate" hreflang="en" href="${SITE_URL}/en/">`,
@@ -59,7 +106,7 @@ function headMeta(page) {
     .join('\n  ');
   return `${alternates}
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="${esc(d.company.name)}">
+  <meta property="og:site_name" content="${esc(D.company.name)}">
   <meta property="og:title" content="${esc(meta.title)}">
   <meta property="og:description" content="${esc(meta.description)}">
   <meta property="og:url" content="${page.url}">
@@ -68,40 +115,54 @@ function headMeta(page) {
   <meta property="og:image" content="${SITE_URL}/assets/hvac-materials-hero.jpg">
   <meta property="og:image:width" content="1686">
   <meta property="og:image:height" content="933">
-  <meta property="og:image:alt" content="${esc(t(page.lang, 'hero.title').replace(/<br\s*\/?>/gi, ' '))}">
+  <meta property="og:image:alt" content="${esc(stripHtml(t(page.lang, 'hero.title')))}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${esc(meta.title)}">
   <meta name="twitter:description" content="${esc(meta.description)}">
   <meta name="twitter:image" content="${SITE_URL}/assets/hvac-materials-hero.jpg">`;
 }
 
+/* --------------------------------------------------------------------
+   2. 结构化数据（JSON-LD）
+   Organization / WebSite / WebPage / 产品列表 / 服务 / FAQ
+   这些内容不显示在页面上，但搜索引擎和 AI 会读，是“正文外”的主要 SEO 材料。
+   -------------------------------------------------------------------- */
 function jsonLd(page) {
-  const meta = d.siteMeta[page.lang];
+  const meta = D.siteMeta[page.lang];
   const orgId = `${SITE_URL}/#organization`;
   const websiteId = `${SITE_URL}/#website`;
   const webPageId = `${page.url}#webpage`;
+  const faqId = `${page.url}#faq`;
   const heroImage = `${SITE_URL}/assets/optimized/hvac-materials-hero.webp`;
+  const faqTitle = stripHtml(l(page.lang, D.faq.title));
+  const keywords = (meta.keywords || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const postalAddress = { '@type': 'PostalAddress', addressCountry: D.company.country || 'ID' };
+  for (const key of ['streetAddress', 'addressLocality', 'addressRegion', 'postalCode']) {
+    if (D.company.address?.[key]) postalAddress[key] = D.company.address[key];
+  }
 
   const organization = {
     '@type': 'Organization',
     '@id': orgId,
-    name: d.company.name,
+    name: D.company.name,
     url: `${SITE_URL}/`,
     description: meta.description,
     email: 'yimiaohuanyu@gmail.com',
-    telephone: d.company.contact[0],
+    telephone: D.company.contact[0],
     logo: `${SITE_URL}/favicon.svg`,
-    address: { '@type': 'PostalAddress', addressCountry: 'ID' },
-    areaServed: { '@type': 'Country', name: 'Indonesia' },
-    knowsLanguage: ['zh-CN', 'en', 'id'],
+    address: postalAddress,
+    areaServed: { '@type': 'Country', name: D.company.serviceArea || 'Indonesia' },
+    knowsLanguage: D.company.languages || ['zh-CN', 'en', 'id'],
+    knowsAbout: keywords,
+    brand: (D.company.brands || []).map((name) => ({ '@type': 'Brand', name })),
     contactPoint: [
       {
         '@type': 'ContactPoint',
-        telephone: d.company.contact[0],
-        email: d.company.contact[2],
+        telephone: D.company.contact[0],
+        email: D.company.contact[2],
         contactType: 'sales',
         areaServed: 'ID',
-        availableLanguage: ['zh-CN', 'en', 'id']
+        availableLanguage: D.company.languages || ['zh-CN', 'en', 'id']
       }
     ]
   };
@@ -110,7 +171,7 @@ function jsonLd(page) {
     '@type': 'WebSite',
     '@id': websiteId,
     url: `${SITE_URL}/`,
-    name: d.company.name,
+    name: D.company.name,
     description: meta.description,
     publisher: { '@id': orgId },
     inLanguage: ['zh-CN', 'en', 'id']
@@ -125,15 +186,16 @@ function jsonLd(page) {
     isPartOf: { '@id': websiteId },
     about: { '@id': orgId },
     inLanguage: page.htmlLang,
+    dateModified: TODAY,
     primaryImageOfPage: { '@type': 'ImageObject', url: heroImage }
   };
 
   const products = {
     '@type': 'ItemList',
     '@id': `${page.url}#products`,
-    name: t(page.lang, 'products.title').replace(/<br\s*\/?>/gi, ' '),
-    numberOfItems: d.products.length,
-    itemListElement: d.products.map((product, index) => ({
+    name: stripHtml(t(page.lang, 'products.title')),
+    numberOfItems: D.products.length,
+    itemListElement: D.products.map((product, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
@@ -142,7 +204,8 @@ function jsonLd(page) {
         description: l(page.lang, product.text),
         image: `${SITE_URL}${optimized(product.image)}`,
         category: t(page.lang, `products.categories.${product.category}`),
-        url: `${page.url}#products`
+        brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+        url: `${page.url}#product-${product.no}`
       }
     }))
   };
@@ -150,46 +213,65 @@ function jsonLd(page) {
   const services = {
     '@type': 'ItemList',
     '@id': `${page.url}#services`,
-    name: t(page.lang, 'support.title').replace(/<br\s*\/?>/gi, ' '),
-    itemListElement: d.support.map((item, index) => ({
+    name: stripHtml(t(page.lang, 'support.title')),
+    itemListElement: D.support.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
         '@type': 'Service',
         name: l(page.lang, item.title),
         description: l(page.lang, item.text),
-        provider: { '@id': orgId }
+        provider: { '@id': orgId },
+        areaServed: { '@type': 'Country', name: D.company.serviceArea || 'Indonesia' }
       }
+    }))
+  };
+
+  const faqPage = {
+    '@type': 'FAQPage',
+    '@id': faqId,
+    url: `${page.url}#faq`,
+    name: faqTitle,
+    inLanguage: page.htmlLang,
+    isPartOf: { '@id': webPageId },
+    mainEntity: D.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: l(page.lang, item.q),
+      acceptedAnswer: { '@type': 'Answer', text: l(page.lang, item.a) }
     }))
   };
 
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@graph': [organization, website, webPage, products, services]
+    '@graph': [organization, website, webPage, products, services, faqPage]
   }, null, 2).replace(/</g, '\\u003c');
 }
 
-function languageOptions(lang) {
-  return ['zh', 'en', 'id'].map((code) => {
-    const name = t(lang, `labels.languageNames.${code}`);
-    return `<option value="${code}"${code === lang ? ' selected' : ''}>${esc(name)}</option>`;
-  }).join('\n        ');
-}
-
-function renderStats(lang) {
-  const stats = t(lang, 'stats');
-  if (!Array.isArray(stats)) return '';
-  return stats.map((item) => `
-        <article class="stat"><strong>${esc(item.number)}<small>${esc(item.suffix)}</small></strong><span>${esc(item.label)}</span></article>`).join('');
+/* --------------------------------------------------------------------
+   3. 页面各区块的 HTML
+   -------------------------------------------------------------------- */
+function languageOptions() {
+  const menu = D.languageMenu || {
+    label: 'Language',
+    options: [
+      { code: 'zh', label: '中文' },
+      { code: 'en', label: 'English' },
+      { code: 'id', label: 'Bahasa Indonesia' }
+    ]
+  };
+  return [
+    `<option value="" selected disabled>${esc(menu.label)}</option>`,
+    ...menu.options.map((item) => `<option value="${esc(item.code)}">${esc(item.label)}</option>`)
+  ].join('\n        ');
 }
 
 function renderProductFilter(lang) {
-  return d.productCategories.map((key) => `
+  return D.productCategories.map((key) => `
         <button data-category="${esc(key)}" class="${key === 'all' ? 'active' : ''}">${esc(t(lang, `products.categories.${key}`))}</button>`).join('');
 }
 
 function renderProducts(lang) {
-  return d.products.map((product) => {
+  return D.products.map((product) => {
     const name = l(lang, product.name);
     const text = l(lang, product.text);
     const category = t(lang, `products.categories.${product.category}`);
@@ -197,7 +279,7 @@ function renderProducts(lang) {
       ? `<img class="product-image optional-image image-loaded" src="${esc(optimized(product.image))}" alt="${esc(name)}" loading="lazy" decoding="async">`
       : '';
     return `
-        <article class="product-card ${esc(product.tone || 'dark')}"
+        <article class="product-card ${esc(product.tone || 'dark')}" id="product-${esc(product.no)}"
           data-detail-title="${esc(name)}" data-detail-body="${esc(text)}" data-detail-image="${esc(product.image)}">
           ${image}
           <div class="product-art"><i></i><i></i></div>
@@ -210,7 +292,7 @@ function renderProducts(lang) {
 }
 
 function renderSolutions(lang) {
-  return d.solutions.map((solution, index) => {
+  return D.solutions.map((solution, index) => {
     const title = l(lang, solution.title);
     const style = solution.image ? ` style="--solution:url('${esc(solution.image)}')"` : '';
     const image = solution.image
@@ -226,7 +308,7 @@ function renderSolutions(lang) {
 }
 
 function renderSupport(lang) {
-  return d.support.map((item) => {
+  return D.support.map((item) => {
     const title = l(lang, item.title);
     const text = l(lang, item.text);
     const badge = item.label ? l(lang, item.label) : item.icon;
@@ -242,7 +324,7 @@ function renderSupport(lang) {
 }
 
 function renderGallery(lang) {
-  return d.gallery.map((item) => {
+  return D.gallery.map((item) => {
     const title = l(lang, item.title);
     const image = item.image
       ? `<img class="gallery-image optional-image image-loaded" src="${esc(optimized(item.image))}" alt="${esc(title)}" loading="lazy" decoding="async">`
@@ -254,19 +336,45 @@ function renderGallery(lang) {
   }).join('\n        ');
 }
 
+function renderFaqList(lang) {
+  return D.faq.items.map((item, index) => `
+          <details class="faq-item"${index === 0 ? ' open' : ''}>
+            <summary>${esc(l(lang, item.q))}</summary>
+            <p>${esc(l(lang, item.a))}</p>
+          </details>`).join('');
+}
+
+function renderHotSearches(lang) {
+  return D.hotSearches.map((item) => `<a href="${esc(item.href)}">${esc(l(lang, item.label))}</a>`).join('\n        ');
+}
+
 function renderContactLinks(lang) {
-  return d.contactLinks.map((item) => item.type === 'qr' ? `
+  return D.contactLinks.map((item) => item.type === 'qr' ? `
         <div class="contact-link qr"><button class="qr-zoom" type="button" aria-label="${esc(l(lang, item.label))} - ${esc(t(lang, 'labels.enlargeQr'))}"><img src="${esc(item.image)}" alt="${esc(l(lang, item.label))}"></button><div><strong>${esc(l(lang, item.label))}</strong><small>${esc(l(lang, item.note))}</small></div></div>` : `
         <a class="contact-link" href="${esc(item.url)}" target="_blank" rel="noopener"><div><strong>${esc(l(lang, item.label))}</strong><small>${esc(l(lang, item.note))}</small></div><b>${esc(item.icon || '↗')}</b></a>`).join('');
 }
 
 function renderFooterContact() {
-  return d.company.contact.map((contact) => `<span>${esc(contact)}</span>`).join('');
+  return D.company.contact.map((contact) => `<span>${esc(contact)}</span>`).join('');
 }
 
+/* --------------------------------------------------------------------
+   4. 把内容套进 build/template.html
+   -------------------------------------------------------------------- */
+const PLACEHOLDER_PATTERNS = [
+  [/\{\{t:([^}]+)\}\}/g, (lang, key) => esc(t(lang, key))],
+  [/\{\{h:([^}]+)\}\}/g, (lang, key) => t(lang, key)],
+  [/\{\{gh:([^}]+)\}\}/g, (lang, key) => l(lang, readPath(D, key))],
+  [/\{\{g:([^}]+)\}\}/g, (lang, key) => esc(l(lang, readPath(D, key)))],
+  [/\{\{style:([^}]+)\}\}/g, (lang, key) => pageStyle(key)],
+  [/\{\{img:([^}]+)\}\}/g, (lang, key) => esc(pageImage(key))],
+  [/\{\{bg:([^}]+)\}\}/g, (lang, key) => backgroundStyle(key)],
+  [/\{\{hasImage:([^}]+)\}\}/g, (lang, key) => imageClass(key)]
+];
+
 function renderPage(page) {
-  const meta = d.siteMeta[page.lang];
-  const template = fs.readFileSync(path.join(__dirname, 'template.html'), 'utf8');
+  const meta = D.siteMeta[page.lang];
+  const template = fs.readFileSync(TEMPLATE_FILE, 'utf8');
   const replacements = {
     htmlLang: page.htmlLang,
     metaTitle: esc(meta.title),
@@ -275,163 +383,241 @@ function renderPage(page) {
     canonical: page.url,
     headMeta: headMeta(page),
     jsonLd: jsonLd(page),
-    languageOptions: languageOptions(page.lang),
-    stats: renderStats(page.lang),
+    languageOptions: languageOptions(),
     productFilter: renderProductFilter(page.lang),
     productsGrid: renderProducts(page.lang),
     solutionsList: renderSolutions(page.lang),
     supportGrid: renderSupport(page.lang),
     galleryGrid: renderGallery(page.lang),
+    faqList: renderFaqList(page.lang),
+    hotSearches: renderHotSearches(page.lang),
     contactLinks: renderContactLinks(page.lang),
     footerContact: renderFooterContact(),
-    'company.name': esc(d.company.name),
-    copyright: esc(d.company.copyright),
-    contactMainLink: esc(d.contactMainLink)
+    'company.name': esc(D.company.name),
+    'company.shortName': esc(D.company.shortName || D.company.name),
+    copyright: esc(D.company.copyright),
+    contactMainLink: esc(D.contactMainLink)
   };
 
-  let html = template
-    .replace(/\{\{t:([^}]+)\}\}/g, (_, key) => esc(t(page.lang, key)))
-    .replace(/\{\{h:([^}]+)\}\}/g, (_, key) => t(page.lang, key));
+  let html = template;
+  for (const [pattern, replacer] of PLACEHOLDER_PATTERNS) {
+    html = html.replace(pattern, (_, key) => replacer(page.lang, key));
+  }
 
   for (const [key, value] of Object.entries(replacements)) {
     html = html.replaceAll(`{{${key}}}`, value);
   }
+
+  const leftover = html.match(/\{\{[^}]+\}\}/);
+  if (leftover) {
+    throw new Error(`template.html 里有未替换的占位符：${leftover[0]}`);
+  }
   return html;
 }
 
-for (const page of pages) {
-  const dir = page.dir ? path.join(ROOT, page.dir) : ROOT;
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), renderPage(page), 'utf8');
-  console.log(`wrote ${path.relative(ROOT, path.join(dir, 'index.html'))}`);
+/* --------------------------------------------------------------------
+   5. robots.txt / sitemap.xml / llms.txt / 部署小文件
+   -------------------------------------------------------------------- */
+function writeRobots() {
+  const aiBots = [
+    'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',
+    'ClaudeBot', 'Claude-SearchBot', 'Claude-User',
+    'PerplexityBot', 'Perplexity-User',
+    'Bytespider', 'Baiduspider',
+    'Googlebot', 'Google-Extended',
+    'Bingbot',
+    'Applebot', 'Applebot-Extended',
+    'CCBot'
+  ];
+  const body = aiBots.map((bot) => `User-agent: ${bot}\nAllow: /`).join('\n\n');
+  fs.writeFileSync(path.join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /build/\n\n# AI 搜索与助手：允许抓取\n${body}\n\nSitemap: ${SITE_URL}/sitemap.xml\n`, 'utf8');
 }
 
-fs.writeFileSync(path.join(ROOT, 'robots.txt'), `User-agent: *
-Allow: /
-Disallow: /build/
-
-# AI search and assistants: allow crawling
-User-agent: GPTBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-SearchBot
-Allow: /
-
-User-agent: Claude-User
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-Sitemap: ${SITE_URL}/sitemap.xml
-`, 'utf8');
-
-fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+function writeSitemap() {
+  const urls = [
+    { loc: `${SITE_URL}/`, priority: '1.0' },
+    { loc: `${SITE_URL}/en/`, priority: '0.9' },
+    { loc: `${SITE_URL}/id/`, priority: '0.9' }
+  ];
+  const alternates = `    <xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE_URL}/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}/en/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="${SITE_URL}/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/"/>`;
+  fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>${SITE_URL}/</loc>
+${urls.map((item) => `  <url>
+    <loc>${item.loc}</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE_URL}/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}/en/"/>
-    <xhtml:link rel="alternate" hreflang="id" href="${SITE_URL}/id/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/"/>
-  </url>
-  <url>
-    <loc>${SITE_URL}/en/</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE_URL}/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}/en/"/>
-    <xhtml:link rel="alternate" hreflang="id" href="${SITE_URL}/id/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/"/>
-  </url>
-  <url>
-    <loc>${SITE_URL}/id/</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE_URL}/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}/en/"/>
-    <xhtml:link rel="alternate" hreflang="id" href="${SITE_URL}/id/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/"/>
-  </url>
+    <priority>${item.priority}</priority>
+${alternates}
+  </url>`).join('\n')}
 </urlset>
 `, 'utf8');
+}
 
-const productLines = d.products.map((product) => `- ${l('en', product.name)}: ${l('en', product.text)}`).join('\n');
-fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# PT. YIMIAO HUANYU TECHNOLOGY INDONESIA
+function writeLlms() {
+  const zh = D.locales.zh;
+  const en = D.locales.en;
+  const id = D.locales.id;
+  const groups = D.productCategories.filter((key) => key !== 'all');
 
-> HVAC materials supplier in Indonesia. Copper tubes, copper fittings, insulation, PU duct panels and refrigerants, with warehouse stock, delivery, installation and after-sales support.
+  const productLines = groups.map((group) => {
+    const items = D.products.filter((product) => product.category === group);
+    return `### ${zh.products.categories[group]} / ${en.products.categories[group]} / ${id.products.categories[group]}
+${items.map((product) => `- ${l('zh', product.name)} | ${l('en', product.name)} | ${l('id', product.name)}\n  ${l('zh', product.text)}`).join('\n')}`;
+  }).join('\n\n');
 
-Canonical: ${SITE_URL}/
-Languages: zh-CN (${SITE_URL}/), en (${SITE_URL}/en/), id (${SITE_URL}/id/)
-Contact: +62 811-1008-6666, +62 811-1008-7777, yimiaohuanyu@gmail.com
+  const faqLines = ['zh', 'en', 'id'].map((lang) => {
+    const title = lang === 'zh' ? '中文' : lang === 'en' ? 'English' : 'Bahasa Indonesia';
+    const items = D.faq.items.map((item, index) => `Q${index + 1}: ${l(lang, item.q)}\nA${index + 1}: ${l(lang, item.a)}`).join('\n\n');
+    return `### ${title}\n\n${items}`;
+  }).join('\n\n');
 
-## Main pages
-- [Chinese home](${SITE_URL}/): 印尼冷暖辅材、铜管、保温材料、PU 系列与制冷剂供应。
-- [English home](${SITE_URL}/en/): HVAC materials supplier in Indonesia.
-- [Indonesian home](${SITE_URL}/id/): Supplier material HVAC di Indonesia.
+  const serviceLines = ['zh', 'en', 'id'].map((lang) => `### ${lang === 'zh' ? '中文' : lang === 'en' ? 'English' : 'Bahasa Indonesia'}
+${D.support.map((item) => `- ${l(lang, item.title)}: ${l(lang, item.text)}`).join('\n')}`).join('\n\n');
 
-## Products
+  fs.writeFileSync(path.join(ROOT, 'llms.txt'), `# ${D.company.name}
+
+> 印尼冷暖辅材供应商：海亮铜管、铜盘管、分支管、铜配件、保温材料、PU 风板与制冷剂。
+>
+> HVAC materials supplier in Indonesia: Hailiang copper tubes, branch pipes, copper fittings, insulation, PU duct panels and refrigerants.
+
+- Website: ${SITE_URL}/
+- Canonical: ${SITE_URL}/
+- Languages: 中文 ${SITE_URL}/ · English ${SITE_URL}/en/ · Bahasa Indonesia ${SITE_URL}/id/
+- Service area: Indonesia
+- Brands: ${(D.company.brands || []).join(', ')}
+- Contact: ${D.company.contact.join(' · ')}
+- Last updated: ${TODAY}
+
+## 中文简介
+${zh.about.text}
+
+## English summary
+${en.about.text}
+
+## Ringkasan Bahasa Indonesia
+${id.about.text}
+
+## 主营产品 / Products
 ${productLines}
 
-## Services
-- Product inquiry and product selection
-- After-sales service and technical support
-- Product catalogues and technical documents
+## 服务 / Services
+${serviceLines}
 
-## Notes
-- This site is public and welcomes search engine and AI assistant crawling.
-- Please use the canonical URLs above when citing the company or products.
+## 常见问题 / FAQ
+${faqLines}
+
+## 页面 / Pages
+- [中文首页](${SITE_URL}/): 印尼铜管、海亮铜管、分支管、保温材料、PU 风板、制冷剂。
+- [English home](${SITE_URL}/en/): Copper tubes, Hailiang copper tube, branch pipes, insulation and refrigerants in Indonesia.
+- [Indonesian home](${SITE_URL}/id/): Pipa tembaga Hailiang, pipa cabang, insulasi, panel PU, dan refrigeran di Indonesia.
+
+## 引用说明 / Citation
+- 引用公司或产品时请使用上面的 canonical 地址。
+- 产品规格、库存和交期以联系销售确认的结果为准。
+- When citing, use the canonical URLs above. Sizes, stock and lead time are confirmed by our sales team.
 `, 'utf8');
+}
 
-fs.writeFileSync(path.join(ROOT, 'CNAME'), 'yimiaohuanyu.com\n', 'utf8');
-fs.writeFileSync(path.join(ROOT, '.nojekyll'), '', 'utf8');
-fs.writeFileSync(path.join(ROOT, '_headers'), `/*
+function writeDeploymentFiles() {
+  let host = 'yimiaohuanyu.com';
+  try { host = new URL(SITE_URL).hostname; } catch (error) { /* 保留默认域名 */ }
+
+  fs.writeFileSync(path.join(ROOT, 'CNAME'), `${host}\n`, 'utf8');
+  fs.writeFileSync(path.join(ROOT, '.nojekyll'), '', 'utf8');
+  fs.writeFileSync(path.join(ROOT, '_headers'), `/*
   X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
 
 /assets/*
   Cache-Control: public, max-age=86400
 `, 'utf8');
 
-fs.writeFileSync(path.join(ROOT, 'favicon.svg'), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  fs.writeFileSync(path.join(ROOT, 'favicon.svg'), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="#EAF5FF"/>
   <path d="M18 16h9l5 12 5-12h9L34 38v10h-4V38L18 16z" fill="#17466E"/>
 </svg>
 `, 'utf8');
 
-fs.writeFileSync(path.join(ROOT, 'package.json'), JSON.stringify({
-  name: 'yimiaohuanyu-site',
-  private: true,
-  version: '1.1.0',
-  scripts: { build: 'node build/build.js' }
-}, null, 2) + '\n', 'utf8');
+  fs.writeFileSync(path.join(ROOT, 'package.json'), JSON.stringify({
+    name: 'yimiaohuanyu-site',
+    private: true,
+    version: D.version || '1.1.3',
+    scripts: {
+      build: 'node build/build.js',
+      watch: 'node build/build.js --watch',
+      dev: 'node serve.js',
+      check: 'node build/check.js'
+    }
+  }, null, 2) + '\n', 'utf8');
+}
 
-console.log('wrote robots.txt, sitemap.xml, llms.txt, CNAME, _headers, favicon.svg, package.json');
+/* --------------------------------------------------------------------
+   6. 主流程
+   -------------------------------------------------------------------- */
+function build() {
+  D = loadContent();
+  SITE_URL = String(D.site?.url || DEFAULT_SITE_URL).replace(/\/+$/, '');
+  const now = new Date();
+  TODAY = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  // pages 依赖 SITE_URL，重新生成一次。
+  pages.length = 0;
+  pages.push(
+    { lang: 'zh', htmlLang: 'zh-CN', dir: '', url: `${SITE_URL}/`, ogLocale: 'zh_CN' },
+    { lang: 'en', htmlLang: 'en', dir: 'en', url: `${SITE_URL}/en/`, ogLocale: 'en_US' },
+    { lang: 'id', htmlLang: 'id', dir: 'id', url: `${SITE_URL}/id/`, ogLocale: 'id_ID' }
+  );
+
+  for (const page of pages) {
+    const dir = page.dir ? path.join(ROOT, page.dir) : ROOT;
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'), renderPage(page), 'utf8');
+    console.log(`  ✓ ${path.relative(ROOT, path.join(dir, 'index.html'))}`);
+  }
+
+  writeRobots();
+  writeSitemap();
+  writeLlms();
+  writeDeploymentFiles();
+  console.log(`  ✓ robots.txt / sitemap.xml / llms.txt / CNAME / _headers / package.json`);
+  console.log(`✅ 生成完成：3 个语言页面，${D.products.length} 个产品，${D.faq.items.length} 条 FAQ（${TODAY}）`);
+  return { pages: pages.length, products: D.products.length, faq: D.faq.items.length };
+}
+
+function watch() {
+  console.log('👀 监听 content.js 和 build/template.html，保存后自动重新生成…');
+  let timer = null;
+  const rebuild = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        build();
+      } catch (error) {
+        console.error(`❌ 生成失败：${error.message}`);
+        console.error('   改坏的地方不会影响已经生成的页面；修正后保存即可重新生成。');
+      }
+    }, 200);
+  };
+  fs.watchFile(CONTENT_FILE, { interval: 400 }, rebuild);
+  fs.watchFile(TEMPLATE_FILE, { interval: 400 }, rebuild);
+}
+
+if (require.main === module) {
+  try {
+    build();
+    if (process.argv.includes('--watch')) watch();
+  } catch (error) {
+    console.error(`❌ 生成失败：${error.message}`);
+    process.exitCode = 1;
+  }
+}
+
+module.exports = { build, watch, loadContent };

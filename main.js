@@ -1,4 +1,4 @@
-/* 交互脚本：页面内容已经预渲染在 HTML 里，这里只负责筛选、弹窗和语言跳转。 */
+/* 交互脚本：页面内容已经预渲染在 HTML 里，这里负责筛选、弹窗、语言跳转和热门搜索定位。 */
 (() => {
   const d = window.siteContent;
   const $ = (selector) => document.querySelector(selector);
@@ -11,8 +11,6 @@
   const pageLang = (document.documentElement.lang || 'zh-CN').toLowerCase();
   let lang = pageLang.startsWith('en') ? 'en' : pageLang.startsWith('id') ? 'id' : 'zh';
   let category = 'all';
-  // 1.1：首次就把全部产品放进 HTML，AI 和普通搜索都能读到 32 个产品。
-  let shown = d.products.length;
 
   const path = (object, key) => key.split('.').reduce((value, part) => value?.[part], object);
   const t = (key) => path(d.locales[lang], key) ?? path(d.locales.zh, key) ?? '';
@@ -178,9 +176,8 @@
 
   const renderProducts = () => {
     const allProducts = d.products.filter((product) => category === 'all' || product.category === category);
-    const visibleProducts = allProducts.slice(0, shown);
-    $('#productsGrid').innerHTML = visibleProducts.map((product) => `
-      <article class="product-card ${esc(product.tone || 'dark')}"
+    $('#productsGrid').innerHTML = allProducts.map((product) => `
+      <article class="product-card ${esc(product.tone || 'dark')}" id="product-${esc(product.no)}"
         data-detail-title="${esc(l(product.name))}"
         data-detail-body="${esc(l(product.text))}"
         data-detail-image="${esc(product.image)}">
@@ -191,15 +188,20 @@
           <button class="product-detail-trigger" type="button" aria-label="${esc(t('labels.moreAbout') + ' ' + l(product.name))}">↗</button>
         </div>
       </article>`).join('');
-    $('#loadMore').style.display = allProducts.length > shown ? 'inline-flex' : 'none';
     activateOptionalImages($('#productsGrid'));
   };
 
   const render = () => {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
     if (!document.title) document.title = d.company.name;
-    $('#languageSelect').innerHTML = ['zh', 'en', 'id'].map((code) => `<option value="${code}">${esc(t('labels.languageNames.' + code))}</option>`).join('');
-    $('#languageSelect').value = lang;
+    const menu = d.languageMenu || { label: 'Language', options: [
+      { code: 'zh', label: '中文' }, { code: 'en', label: 'English' }, { code: 'id', label: 'Bahasa Indonesia' }
+    ] };
+    $('#languageSelect').innerHTML = [
+      `<option value="" selected disabled>${esc(menu.label)}</option>`,
+      ...menu.options.map((item) => `<option value="${esc(item.code)}">${esc(item.label)}</option>`)
+    ].join('');
+    $('#languageSelect').value = '';
     $$('[data-brand]').forEach((element) => { element.textContent = d.company.initial; });
     $$('[data-brand-name]').forEach((element) => { element.textContent = d.company.name; });
     $('[data-copyright]').textContent = d.company.copyright;
@@ -207,23 +209,18 @@
     $$('[data-aria-t]').forEach((element) => { element.setAttribute('aria-label', t(element.dataset.ariaT)); });
     $$('[data-html]').forEach((element) => { element.innerHTML = t(element.dataset.html); });
 
-    $('#stats').innerHTML = t('stats').map((item) => `
-      <article class="stat"><strong>${esc(item.number)}<small>${esc(item.suffix)}</small></strong><span>${esc(item.label)}</span></article>`).join('');
-
     $('#productFilter').innerHTML = d.productCategories.map((key) => `
       <button data-category="${esc(key)}" class="${key === category ? 'active' : ''}">${esc(t('products.categories.' + key))}</button>`).join('');
     renderProducts();
 
     $('#solutionsList').innerHTML = d.solutions.map((solution, index) => `
-      <button type="button" class="solution-item" style="--solution:url('${esc(solution.image)}')"
-        data-detail-title="${esc(l(solution.title))}" data-detail-image="${esc(solution.image)}">
-        ${optionalImage(solution.image, 'solution-thumb')}
+      <button type="button" class="solution-item"
+        data-detail-title="${esc(l(solution.title))}">
         <span>0${index + 1}</span><strong>${esc(l(solution.title))}</strong><b>↗</b>
       </button>`).join('');
 
     $('#supportGrid').innerHTML = d.support.map((item) => `
-      <button type="button" class="support-card" data-detail-title="${esc(l(item.title))}" data-detail-body="${esc(l(item.text))}" data-detail-image="${esc(item.image || '')}">
-        ${optionalImage(item.image, 'support-thumb')}
+      <button type="button" class="support-card" data-detail-title="${esc(l(item.title))}" data-detail-body="${esc(l(item.text))}">
         <b>${esc(item.label ? l(item.label) : item.icon)}</b><h3>${esc(l(item.title))}</h3><p>${esc(l(item.text))}</p><i>↗</i>
       </button>`).join('');
 
@@ -242,32 +239,27 @@
 
     $('[data-contact-main]').href = d.contactMainLink;
     $('#footerContact').innerHTML = d.company.contact.map((contact) => `<span>${esc(contact)}</span>`).join('');
-    activateOptionalImages($('#solutionsList'));
-    activateOptionalImages($('#supportGrid'));
     activateOptionalImages($('#galleryGrid'));
     activateBrandLogos();
   };
 
-  // 大页面图片路径写在 build/template.html 对应页面里，预渲染时会写进 HTML。
+  // 只有首屏和愿景页有大图；图片路径写在 content.js 的 pageVisuals 里。
   // 没填写路径或图片不存在时，图片区域自动隐藏，不显示破图或空白框。
   const applyPageImage = (sectionSelector, imageSelector) => {
     const section = $(sectionSelector);
     setBackgroundImage(imageSelector, section?.dataset.pageImage || '');
   };
   applyPageImage('#home', '#heroImage');
-  applyPageImage('#about', '#introImage');
   applyPageImage('#vision', '#visionImage');
-  applyPageImage('#products', '#productsImage');
-  applyPageImage('#solutions', '#solutionsImage');
-  applyPageImage('#support', '#supportImage');
-  applyPageImage('.gallery', '#galleryImage');
-  applyPageImage('#contact', '#contactImage');
   $('#languageSelect').value = lang;
   render();
 
   $('#languageSelect').addEventListener('change', (event) => {
     const next = event.target.value;
-    if (next === lang) return;
+    if (!next || next === lang || !['zh', 'en', 'id'].includes(next)) {
+      event.target.value = '';
+      return;
+    }
     // 三种语言分别对应真实网址，方便搜索引擎和 AI 分别收录。
     window.location.href = (next === 'zh' ? '/' : `/${next}/`) + window.location.hash;
   });
@@ -275,16 +267,52 @@
     const button = event.target.closest('[data-category]');
     if (!button) return;
     category = button.dataset.category;
-    shown = d.products.length;
     render();
-  });
-  $('#loadMore').addEventListener('click', () => {
-    shown += 8;
-    renderProducts();
   });
   const header = $('.site-header');
   addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 45), { passive: true });
   $('.menu-toggle').addEventListener('click', () => $('.main-nav').classList.toggle('open'));
+
+  // 页脚“热门搜索”跳到具体产品：先恢复到“全部”，再滚动并闪一下，用户不会找不到。
+  const revealProduct = (id) => {
+    const card = document.getElementById(id);
+    if (!card) return;
+    if (card.closest('.product-grid') && !card.offsetParent) {
+      category = 'all';
+      render();
+    }
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.remove('is-highlighted');
+    void target.offsetWidth;
+    target.classList.add('is-highlighted');
+    clearTimeout(revealProduct.timer);
+    revealProduct.timer = setTimeout(() => target.classList.remove('is-highlighted'), 2400);
+  };
+
+  const showProductFromHash = (hash) => {
+    const id = String(hash || '').replace(/^#/, '');
+    if (!/^product-/.test(id)) return false;
+    if (!document.getElementById(id)) {
+      category = 'all';
+      render();
+    }
+    revealProduct(id);
+    return true;
+  };
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('.hot-searches a');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (!href.startsWith('#product-')) return;
+    event.preventDefault();
+    showProductFromHash(href);
+    history.replaceState(null, '', href);
+  });
+  addEventListener('hashchange', () => showProductFromHash(location.hash));
+  requestAnimationFrame(() => showProductFromHash(location.hash));
 
   const closeZoom = (modal) => {
     modal.classList.remove('is-open');
